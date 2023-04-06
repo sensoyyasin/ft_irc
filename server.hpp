@@ -8,13 +8,13 @@
 #include <netinet/in.h> /* for struct sockaddr_in */
 #include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <netdb.h> /* struct hostent *server */
 #define PORT 8080
 #define BUFFER_SIZE 1024
 
 class server
 {
-private:
-	/* data */
 public:
 	server();
 	~server();
