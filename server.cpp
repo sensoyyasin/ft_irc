@@ -14,8 +14,10 @@ void  Server::appointment(int argc, char **argv)
 		std::cerr << "Arg Error." << std::endl;
 		exit(1);
 	}
-	this->my_password = argv[1];
-	this->my_port = std::stoi(argv[2]);
+	this->my_port = std::stoi(argv[1]);
+	this->my_password = argv[2];
+	//this->my_password = argv[1];
+	//this->my_port = std::stoi(argv[2]);
 	this->addr_len = sizeof(this->address);
 	this->buffer[BUFFER_SIZE] = 0;
 }
