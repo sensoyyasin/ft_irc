@@ -7,7 +7,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
 #include <unistd.h>
-#include <string.h>
 #include <unistd.h>
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
@@ -23,8 +22,8 @@ struct sockaddr_in {
 
 /* --System args--
    argv[0] = filename
-   argv[1] = port
-   argv[2] = passwd */
+   argv[1] = localhost
+   argv[2] = port */
 
 class Server
 {
@@ -34,8 +33,6 @@ class Server
 	public:
 		int server_fd;
 		int new_socket;
-		int binder;
-		int setsocketer;
 		int addr_len;
 		int opt;
 		struct sockaddr_in address;

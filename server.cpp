@@ -14,8 +14,8 @@ void  Server::appointment(int argc, char **argv)
 		std::cerr << "Arg Error." << std::endl;
 		exit(1);
 	}
-	this->my_port = std::stoi(argv[1]);
-	this->my_password = argv[2];
+	this->my_password = argv[1];
+	this->my_port = std::stoi(argv[2]);
 	this->addr_len = sizeof(this->address);
 	this->buffer[BUFFER_SIZE] = 0;
 }
@@ -29,10 +29,9 @@ void	Server::socketOperations(Server &server)
 		exit(1);
 	}
 
-	/* Forcefully attaching socket to the port 8080(whatever you want) */
-	server.setsocketer = setsockopt(server.server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &server.opt, sizeof(server.opt));
-	if (server.setsocketer != 0)
-		std::cout << "Setsockopt bekleniyor." << std::endl;
+	/* Set master socket to allow multiple connections */
+	if (setsockopt(server.server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &server.opt, sizeof(server.opt)) != 0)
+		std::cout << "Setsockopt set up and connecting to server..." << std::endl;
 	else
 	{
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
@@ -47,7 +46,7 @@ void	Server::socketOperations2(Server &server, char **argv)
 	server.address.sin_addr.s_addr = INADDR_ANY;
 	server.address.sin_port = htons(atoi(argv[1]));
 
-	if ((server.binder = bind(server.server_fd, (struct sockaddr *)&server.address, sizeof(server.address))) < 0)
+	if (bind(server.server_fd, (struct sockaddr *)&server.address, sizeof(server.address)) < 0)
 	{
 		std::cerr << "Error binding to port " << std::endl;
 		exit(1);

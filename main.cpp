@@ -19,8 +19,6 @@ int main(int argc, char **argv)
 			std::cerr << "Accept failed" << std::endl;
 			return (1);
 		}
-		// int client_port = ntohs(server.address.sin_port);
-		// if (client_port != )
 		while (!strstr(server.buffer, "\n\r"))
 		{
 			memset(server.buffer, 0, BUFFER_SIZE);
@@ -42,7 +40,7 @@ int main(int argc, char **argv)
 		}
 		//closing the connected socket
 		close(server.new_socket);
-	}
+	}		
 
 	//closing the listening socket
 	shutdown(server.server_fd, SHUT_RDWR);
