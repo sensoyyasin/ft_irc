@@ -14,6 +14,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 #include <errno.h> 
+#include <map>
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 30
@@ -37,14 +38,18 @@ class Server
 		std::string my_password;
 	public:
 		struct pollfd fds[MAX_CLIENTS];
+		int	join_key;
 		int client_socket[30];
 		int server_fd;
 		int new_socket;
 		int addr_len;
 		int opt;
+		int rv;
+		int timeout;
 		struct sockaddr_in address;
 		char *buffer;
-		//std::vector<fds> poll_sockets;
+		//std::map<std::string, int> mymap;
+		//std::map<std::string, int>::iterator my_iterator;
 
 		Server();
 		~Server();
@@ -52,6 +57,7 @@ class Server
 		void	appointment(int argc, char **argv);
 		void	socketOperations(Server &server);
 		void	socketOperations2(Server &server, char **argv);
+		void	parser(Server &server, std::string message);
 
 		/* Getter and setter */
 		int	getmyport();

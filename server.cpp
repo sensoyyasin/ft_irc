@@ -3,6 +3,9 @@
 Server::Server()
 {
 	this->opt = 1;
+	this->rv = 0;
+	this->timeout = (3 * 60 * 1000);
+	this->join_key = 0;
 }
 
 Server::~Server(){}
@@ -55,6 +58,37 @@ void	Server::socketOperations2(Server &server, char **argv)
 	if (listen(server.server_fd, MAX_CLIENTS) < 0)
 	{
 		std::cerr << "listen failed" << std::endl;
+		exit(1);
+	}
+}
+
+void	Server::parser(Server &server, std::string message)
+{
+	if (strstr(message.c_str(), "JOIN"))
+	{
+		std::string str = server.buffer;
+		std::string delimiter = " ";
+		std::string token = str.substr(0, str.find(delimiter));
+
+		size_t pos = 0;
+		while ((pos = str.find(delimiter)) != std::string::npos)
+		{
+			token = str.substr(0, pos);
+			if (token != "JOIN")
+			{
+				std::cout << "\033[1;91mERROR [JOIN]\033[0m" << std::endl;
+				exit(1);
+			}
+			str.erase(0, pos + delimiter.length());
+		}
+		server.join_key = std::stoi(str);
+		//std::cout << server.join_key << std::endl;
+	}
+	
+	if (strstr(message.c_str(), "QUIT") || strstr(message.c_str(), "EXIT"))
+	{
+		std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
+		close(server.new_socket);
 		exit(1);
 	}
 }

@@ -15,19 +15,17 @@ int main(int argc, char **argv)
 
 	server.fds[0].fd = server.server_fd;
 	server.fds[0].events = POLLIN;
-	int rv;
-	int timeout = (3 * 60 * 1000);
 
 	std::string message;
 	while (1)
 	{
-    	rv = poll(server.fds, 1, timeout);
-    	if (rv < 0)
+    	server.rv = poll(server.fds, 1, server.timeout);
+    	if (server.rv < 0)
     	{
         	std::cerr << "Poll error" << std::endl;
         	return (1);
     	}
-		else if (rv == 0)
+		else if (server.rv == 0)
 		{
 			std::cout << "poll() timed out. End program." << std::endl;
 			return (1);
@@ -35,6 +33,7 @@ int main(int argc, char **argv)
     	if (server.fds[0].revents & POLLIN) 
     	{
         	memset(server.buffer, 0, sizeof(server.fds));
+			message.clear();
         	if ((server.new_socket = accept(server.server_fd, (struct sockaddr*)&server.address, (socklen_t *)&server.addr_len)) < 0)
         	{
             	std::cerr << "Accept failed" << std::endl;
@@ -51,13 +50,8 @@ int main(int argc, char **argv)
                 	break;
             	}
             	message.append(server.buffer);
-            	if (strstr(message.c_str(), "QUIT") || strstr(message.c_str(), "EXIT"))
-            	{
-                	std::cout << "\033[1;93mLeaving...\033[0m" << std::endl;
-                	close(server.new_socket);
-                	return(0);
-            	}
-            	std::cout << message << std::endl;
+				server.parser(server, message);
+				std::cout << message << std::endl;
         	}
         	//closing the connected socket
         	close(server.new_socket);
@@ -67,6 +61,7 @@ int main(int argc, char **argv)
 	shutdown(server.server_fd, SHUT_RDWR);
 	return (0);
 }
+
 
 	// while (1)
 	// {
