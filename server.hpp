@@ -6,12 +6,17 @@
 #include <string>
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <unistd.h>
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <errno.h> 
 #define PORT 8080
 #define BUFFER_SIZE 1024
+#define MAX_CLIENTS 30
 /* A sockaddr_in is a structure containing an internet address. This structure is defined in <netinet/in.h>. Here is the definition:
 struct sockaddr_in {
         short   sin_family;
@@ -31,6 +36,9 @@ class Server
 		int my_port;
 		std::string my_password;
 	public:
+		struct pollfd fds[MAX_CLIENTS];
+		int client_socket[30];
+		struct pollfd mypoll[3];
 		int server_fd;
 		int new_socket;
 		int addr_len;

@@ -1,4 +1,4 @@
-#include "server.hpp"
+#include "Server.hpp"
 
 Server::Server()
 {
@@ -16,15 +16,13 @@ void  Server::appointment(int argc, char **argv)
 	}
 	this->my_port = std::stoi(argv[1]);
 	this->my_password = argv[2];
-	//this->my_password = argv[1];
-	//this->my_port = std::stoi(argv[2]);
 	this->addr_len = sizeof(this->address);
 	this->buffer[BUFFER_SIZE] = 0;
 }
 
 void	Server::socketOperations(Server &server)
 {
-	/* Create a socket */
+	/* Create a master socket */
 	if ((server.server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
 	{
 		std::cerr << "Socket Failed" << std::endl;
@@ -54,7 +52,7 @@ void	Server::socketOperations2(Server &server, char **argv)
 		exit(1);
 	}
 
-	if (listen(server.server_fd, 3) < 0)
+	if (listen(server.server_fd, MAX_CLIENTS) < 0)
 	{
 		std::cerr << "listen failed" << std::endl;
 		exit(1);
