@@ -38,13 +38,13 @@ class Server
 	public:
 		struct pollfd fds[MAX_CLIENTS];
 		int client_socket[30];
-		struct pollfd mypoll[3];
 		int server_fd;
 		int new_socket;
 		int addr_len;
 		int opt;
 		struct sockaddr_in address;
 		char *buffer;
+		//std::vector<fds> poll_sockets;
 
 		Server();
 		~Server();

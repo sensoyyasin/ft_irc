@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 		}
     	if (server.fds[0].revents & POLLIN) 
     	{
-        	memset(server.buffer, 0, BUFFER_SIZE);
+        	memset(server.buffer, 0, sizeof(server.fds));
         	if ((server.new_socket = accept(server.server_fd, (struct sockaddr*)&server.address, (socklen_t *)&server.addr_len)) < 0)
         	{
             	std::cerr << "Accept failed" << std::endl;
