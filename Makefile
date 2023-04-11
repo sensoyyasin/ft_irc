@@ -1,5 +1,5 @@
 NAME = ircserv
-CC = c++ -Wall -Wextra -Werror
+CC = c++
 SRCS = $(wildcard *.cpp)
 OBJ = $(SRCS:.cpp = .o)
 

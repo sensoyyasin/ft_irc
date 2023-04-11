@@ -11,6 +11,7 @@
 #include <fcntl.h>
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
+#include <map>
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_USR 100
@@ -28,6 +29,8 @@ struct sockaddr_in {
    argv[1] = localhost
    argv[2] = port */
 
+typedef void (*func_ptr)(std::string);
+
 class Server
 {
 	private:
@@ -35,10 +38,12 @@ class Server
 		std::string my_password;
 		Server();
 	public:
+		int					new_socket;
 		int					server_fd;
 		struct sockaddr_in	address;
 		std::string			buffer;
 		std::vector<pollfd>	pollfds;
+		std::map<std::string, func_ptr> capls_map;
 
 		Server(int, char **);
 		~Server();
@@ -48,13 +53,19 @@ class Server
 		void	socketOperations2(char **argv);
 		void	parser();
 
-		void	newClient(); // musab
-		void	executeCommand(int fd); // musab
-		void	loop(); // musab
+		void	newClient();
+		void	executeCommand(int fd);
+		void	loop();
 
 		/* Getter and setter */
 		int	getmyport();
 		std::string	getmypassword();
 };
+
+void add(std::string);
+void cap(std::string);
+void nick(std::string);
+void join(std::string);
+void quit(std::string);
 
 #endif
