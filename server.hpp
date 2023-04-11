@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
 #include <unistd.h>
@@ -32,21 +33,24 @@ class Server
 	private:
 		int my_port;
 		std::string my_password;
-	public:
-		int					opt;
-		int					addr_len;
-		int					server_fd;
-		int					client_fd[MAX_USR];
-		char				buffer[BUFFER_SIZE];
-		struct sockaddr_in	address;
-		struct pollfd		polls[3];
-
 		Server();
+	public:
+		int					server_fd;
+		struct sockaddr_in	address;
+		std::string			buffer;
+		std::vector<pollfd>	pollfds;
+
+		Server(int, char **);
 		~Server();
 
 		void	appointment(int argc, char **argv);
-		void	socketOperations(Server &server);
-		void	socketOperations2(Server &server, char **argv);
+		void	socketOperations();
+		void	socketOperations2(char **argv);
+		void	parser();
+
+		void	newClient(); // musab
+		void	executeCommand(int fd); // musab
+		void	loop(); // musab
 
 		/* Getter and setter */
 		int	getmyport();
