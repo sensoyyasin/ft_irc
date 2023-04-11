@@ -11,6 +11,17 @@ Server::Server(int argc, char **argv)
 
 Server::~Server(){}
 
+/* GETTER AND SETTER ON THE WAY -_- */
+int	Server::getmyport()
+{
+	return(this->my_port);
+}
+
+std::string	Server::getmypassword()
+{
+	return (this->my_password);
+}
+
 void  Server::appointment(int argc, char **argv)
 {
 	if (argc != 3)
@@ -60,17 +71,6 @@ void	Server::socketOperations2(char **argv)
 		exit(1);
 	}
 	pollfds.push_back((pollfd){server_fd, POLLIN, 0});
-}
-
-/* GETTER AND SETTER ON THE WAY -_- */
-int	Server::getmyport()
-{
-	return(this->my_port);
-}
-
-std::string	Server::getmypassword()
-{
-	return (this->my_password);
 }
 
 void	Server::parser()
