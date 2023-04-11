@@ -1,6 +1,6 @@
 NAME = ircserv
 CC = c++
-SRCS = $(wildcard *.cpp)
+SRCS = $(wildcard headers/*.cpp srcs/*.cpp)
 OBJ = $(SRCS:.cpp = .o)
 
 $(NAME): $(OBJ)

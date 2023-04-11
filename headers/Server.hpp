@@ -13,8 +13,8 @@
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
 #include <map>
-#include "Client.hpp"
-#include "Channel.hpp"
+#include "../headers/Client.hpp"
+#include "../headers/Channel.hpp"
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_USR 100
@@ -32,7 +32,7 @@ class Server
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
 		std::vector<Client> clients_;
-		std::vector<Channel> channels_;
+		//std::vector<Channel> channels_;
 
 		Server(){} //We have to use for inheritance
 		Server(int, char **);

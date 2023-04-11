@@ -1,7 +1,4 @@
-#include "Server.hpp"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/ip.h>
+#include "../headers/Server.hpp"
 
 int main(int argc, char **argv)
 {

@@ -1,6 +1,6 @@
-#include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+#include "../headers/Channel.hpp"
+#include "../headers/Client.hpp"
+#include "../headers/Server.hpp"
 
 Server::Server(int argc, char **argv)
 {
