@@ -6,18 +6,14 @@
 #include <string>
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
-#include <arpa/inet.h>
 #include <unistd.h>
-#include <unistd.h>
+#include <fcntl.h>
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <errno.h> 
-#include <map>
 #define PORT 8080
 #define BUFFER_SIZE 1024
-#define MAX_CLIENTS 30
+#define MAX_USR 100
+
 /* A sockaddr_in is a structure containing an internet address. This structure is defined in <netinet/in.h>. Here is the definition:
 struct sockaddr_in {
         short   sin_family;
@@ -37,19 +33,13 @@ class Server
 		int my_port;
 		std::string my_password;
 	public:
-		struct pollfd fds[MAX_CLIENTS];
-		int	join_key;
-		int client_socket[30];
-		int server_fd;
-		int new_socket;
-		int addr_len;
-		int opt;
-		int rv;
-		int timeout;
-		struct sockaddr_in address;
-		char *buffer;
-		//std::map<std::string, int> mymap;
-		//std::map<std::string, int>::iterator my_iterator;
+		int					opt;
+		int					addr_len;
+		int					server_fd;
+		int					client_fd[MAX_USR];
+		char				buffer[BUFFER_SIZE];
+		struct sockaddr_in	address;
+		struct pollfd		polls[3];
 
 		Server();
 		~Server();
@@ -57,7 +47,6 @@ class Server
 		void	appointment(int argc, char **argv);
 		void	socketOperations(Server &server);
 		void	socketOperations2(Server &server, char **argv);
-		void	parser(Server &server, std::string message);
 
 		/* Getter and setter */
 		int	getmyport();
