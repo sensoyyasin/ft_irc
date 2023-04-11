@@ -1,18 +1,18 @@
-#include "server.hpp"
+#include "Server.hpp"
 
 Server::Server(int argc, char **argv)
 {
 	appointment(argc, argv);
 	std::cout << "Starting IRC server on port " << std::endl;
-	
+
 	socketOperations();
 	socketOperations2(argv);
 
-	this->capls_map["ADD"] = add;
-	this->capls_map["NICK"]	= nick;
-	this->capls_map["JOIN"]	= join;
-	this->capls_map["QUIT"]	= quit;
-	this->capls_map["CAP"]	= cap;
+	capls_map["ADD"]    = &Server::add;
+	capls_map["NICK"]	= &Server::nick;
+	capls_map["JOIN"]	= &Server::join;
+	capls_map["QUIT"]	= &Server::quit;
+	capls_map["CAP"]	= &Server::cap;
 }
 
 Server::~Server(){}
@@ -89,7 +89,7 @@ void	Server::socketOperations2(char **argv)
 
 void	Server::parser()
 {
-    std::string str = buffer;
+	std::string str = buffer;
 	int	del_place = str.find(" ");
 	std::string token = str.substr(0, del_place);
 	std::string args = str.substr(del_place + 1);
@@ -100,7 +100,7 @@ void	Server::parser()
 	std::vector<std::string> my_vec(my_array, my_array + 5);
 	if (std::find(my_vec.begin(), my_vec.end(), token) == my_vec.end())
 		return ;
-	capls_map[token](args);
+	(this->*capls_map[token])(args);
 }
 
 void	Server::newClient()
@@ -134,7 +134,7 @@ void	Server::executeCommand(int fd)
 		buffer.clear();
 		char buff[BUFFER_SIZE];
 		memset(buff, 0, BUFFER_SIZE);
-		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0); 
+		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
 		if (bytes_received < 0)
 		{
 			std::cerr << "Receive failed" << std::endl;
@@ -143,4 +143,31 @@ void	Server::executeCommand(int fd)
 		buffer = std::string(buff);
 		parser();
 	}
+}
+
+void Server::cap(std::string str)
+{
+	(void)str;
+}
+
+void Server::add(std::string str)
+{
+	(void)str;
+}
+
+void Server::nick(std::string str)
+{
+	(void)str;
+}
+
+void Server::join(std::string str)
+{
+	(void)str;
+}
+
+void Server::quit(std::string str)
+{
+	(void)str;
+	std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
+		exit(1);
 }
