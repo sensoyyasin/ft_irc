@@ -32,26 +32,29 @@ int main(int argc, char **argv)
 		}
     	if (server.pollfds[0].revents & POLLIN) 
     	{
-            memset(server.buffer, 0, BUFFER_SIZE);
-			message.clear();
+            //memset(server.buffer, 0, BUFFER_SIZE);
+			server.buffer.clear();
         	if ((server.new_socket = accept(server.server_fd, (struct sockaddr*)&server.address, (socklen_t *)&server.addr_len)) < 0)
         	{
             	std::cerr << "Accept failed" << std::endl;
             	return (1);
         	}
-        	while (!strstr(server.buffer, "\n\r"))
+        	while (server.buffer.find("\n\r"))
         	{
-            	memset(server.buffer, 0, BUFFER_SIZE);
-            	int bytes_received = recv(server.new_socket, server.buffer, BUFFER_SIZE, 0); 
+				server.buffer.clear();
+				char buffer[BUFFER_SIZE];
+            	memset(buffer, 0, BUFFER_SIZE);
+            	int bytes_received = recv(server.new_socket, buffer, BUFFER_SIZE, 0); 
             	if (bytes_received < 0)
             	{
                 	std::cerr << "Receive failed" << std::endl;
                 	close(server.new_socket);
                 	break;
             	}
+				server.buffer = std::string(buffer);
             	message.append(server.buffer);
-				server.parser(server, message);
-				std::cout << message << std::endl;
+				server.parser(server);
+				// std::cout << message << std::endl;
         	}
         	//closing the connected socket
         	close(server.new_socket);

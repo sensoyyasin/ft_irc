@@ -48,7 +48,7 @@ class Server
 		int timeout;
 		struct sockaddr_in address;
 		std::vector<pollfd> pollfds;
-		char *buffer;
+		std::string buffer;
 		//std::map<std::string, int> mymap;
 		//std::map<std::string, int>::iterator my_iterator;
 
@@ -58,7 +58,7 @@ class Server
 		void	appointment(int argc, char **argv);
 		void	socketOperations(Server &server);
 		void	socketOperations2(Server &server, char **argv);
-		void	parser(Server &server, std::string message);
+		void	parser(Server &server);
 
 		/* Getter and setter */
 		int	getmyport();

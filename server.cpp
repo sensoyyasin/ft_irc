@@ -63,31 +63,17 @@ void	Server::socketOperations2(Server &server, char **argv)
 	pollfds.push_back((pollfd){server.server_fd, POLLIN, 0});
 }
 
-void	Server::parser(Server &server, std::string message)
+void	Server::parser(Server &server)
 {
-	//std::cout << "Her satirim yani Buffer'im" << server.buffer << std::endl;
-	if (server.buffer[0] == 'J' && server.buffer[1] == 'O' && server.buffer[2] == 'I' && server.buffer[3] == 'N')
+    std::string str = server.buffer;
+	int	del_place = str.find(" ");
+	std::string token = str.substr(0, del_place);
+	std::string args = str.substr(del_place + 1); 
+	if (token == "JOIN")
 	{
-		std::string str = server.buffer;
-		std::string delimiter = " ";
-		std::string token = str.substr(0, str.find(delimiter));
-
-		size_t pos = 0;
-		while ((pos = str.find(delimiter)) != std::string::npos)
-		{
-			token = str.substr(0, pos);
-			if (token != "JOIN")
-			{
-				std::cout << "\033[1;91mERROR [JOIN]\033[0m" << std::endl;
-				exit(1);
-			}
-			str.erase(0, pos + delimiter.length());
-		}
-		server.join_key = std::stoi(str);
-		//std::cout << server.join_key << std::endl;
+		//server.join_key = std::stoi(str);
 	}
-	
-	if (strstr(message.c_str(), "QUIT") || strstr(message.c_str(), "EXIT"))
+	if (token ==  "QUIT" || token == "EXIT")
 	{
 		std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
 		close(server.new_socket);
