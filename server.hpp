@@ -15,6 +15,7 @@
 #include <sys/time.h>
 #include <errno.h> 
 #include <map>
+#include <vector>
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 30
@@ -37,9 +38,8 @@ class Server
 		int my_port;
 		std::string my_password;
 	public:
-		struct pollfd fds[MAX_CLIENTS];
+		//struct pollfd fds[MAX_CLIENTS];
 		int	join_key;
-		int client_socket[30];
 		int server_fd;
 		int new_socket;
 		int addr_len;
@@ -47,6 +47,7 @@ class Server
 		int rv;
 		int timeout;
 		struct sockaddr_in address;
+		std::vector<pollfd> pollfds;
 		char *buffer;
 		//std::map<std::string, int> mymap;
 		//std::map<std::string, int>::iterator my_iterator;

@@ -60,11 +60,13 @@ void	Server::socketOperations2(Server &server, char **argv)
 		std::cerr << "listen failed" << std::endl;
 		exit(1);
 	}
+	pollfds.push_back((pollfd){server.server_fd, POLLIN, 0});
 }
 
 void	Server::parser(Server &server, std::string message)
 {
-	if (strstr(message.c_str(), "JOIN"))
+	//std::cout << "Her satirim yani Buffer'im" << server.buffer << std::endl;
+	if (server.buffer[0] == 'J' && server.buffer[1] == 'O' && server.buffer[2] == 'I' && server.buffer[3] == 'N')
 	{
 		std::string str = server.buffer;
 		std::string delimiter = " ";

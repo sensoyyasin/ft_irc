@@ -13,13 +13,13 @@ int main(int argc, char **argv)
 	std::cout << "Waiting for connections..." << std::endl;
 	std::cout << "Port : " << ntohs(server.address.sin_port) << std::endl;
 
-	server.fds[0].fd = server.server_fd;
-	server.fds[0].events = POLLIN;
+	server.pollfds[0].fd = server.server_fd;
+	server.pollfds[0].events = POLLIN;
 
 	std::string message;
 	while (1)
 	{
-    	server.rv = poll(server.fds, 1, server.timeout);
+    	server.rv = poll(server.pollfds.begin().base() , 1, server.timeout);
     	if (server.rv < 0)
     	{
         	std::cerr << "Poll error" << std::endl;
@@ -30,9 +30,9 @@ int main(int argc, char **argv)
 			std::cout << "poll() timed out. End program." << std::endl;
 			return (1);
 		}
-    	if (server.fds[0].revents & POLLIN) 
+    	if (server.pollfds[0].revents & POLLIN) 
     	{
-        	memset(server.buffer, 0, sizeof(server.fds));
+            memset(server.buffer, 0, BUFFER_SIZE);
 			message.clear();
         	if ((server.new_socket = accept(server.server_fd, (struct sockaddr*)&server.address, (socklen_t *)&server.addr_len)) < 0)
         	{
