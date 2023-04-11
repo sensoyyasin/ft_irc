@@ -1,4 +1,6 @@
 #include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
 Server::Server(int argc, char **argv)
 {
@@ -8,11 +10,11 @@ Server::Server(int argc, char **argv)
 	socketOperations();
 	socketOperations2(argv);
 
-	capls_map["ADD"]    = &Server::add;
-	capls_map["NICK"]	= &Server::nick;
-	capls_map["JOIN"]	= &Server::join;
-	capls_map["QUIT"]	= &Server::quit;
-	capls_map["CAP"]	= &Server::cap;
+	cap_ls[0] =  "ADD";
+	cap_ls[1] =  "NICK";
+	cap_ls[2] =  "JOIN";
+	cap_ls[3] =  "QUIT";
+	cap_ls[4] =  "CAP";
 }
 
 Server::~Server(){}
@@ -94,13 +96,21 @@ void	Server::parser()
 	std::string token = str.substr(0, del_place);
 	std::string args = str.substr(del_place + 1);
 
-	std::cout << "Token recieved: " << token << std::endl;
-
-	std::string my_array[] = {"ADD", "JOIN", "CAP", "QUIT", "EXIT"};
-	std::vector<std::string> my_vec(my_array, my_array + 5);
-	if (std::find(my_vec.begin(), my_vec.end(), token) == my_vec.end())
-		return ;
-	(this->*capls_map[token])(args);
+	 if (cap_ls[0].find(token) != std::string::npos)
+	 	add(*this, args);
+	 else if (cap_ls[1].find(token) != std::string::npos)
+		nick(*this, args);
+	 else if (cap_ls[2].find(token) != std::string::npos)
+		join(*this, args);
+	 else if (cap_ls[3].find(token) != std::string::npos)
+		quit(*this, args);
+	 else if (cap_ls[4].find(token) != std::string::npos)
+		cap(*this, args);
+	else
+	{
+		std::cerr << "Invalid commands: " << token << std::endl;
+		return;
+	}
 }
 
 void	Server::newClient()
@@ -114,12 +124,12 @@ void	Server::newClient()
 		return ;
 	}
 	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
-	std::map<std::string, func_ptr>::iterator it;
-	it = capls_map.begin();
-	while (it != capls_map.end())
+	std::map<int, std::string>::iterator it;
+	it = cap_ls.begin();
+	while (it != cap_ls.end())
 	{
 		std::string str = "/";
-		str += it->first;
+		str += it->second;
 		str += "\n\r";
 		if (send(this->new_socket, str.c_str(), str.size(), 0) != str.size())
 			std::cerr << "Error" << std::endl;
@@ -145,27 +155,49 @@ void	Server::executeCommand(int fd)
 	}
 }
 
-void Server::cap(std::string str)
+void Server::cap(Server &server, std::string line)
 {
+	(void)line; // protected our segmentation fault.
+}
+
+void Server::add(Server &server, std::string line)
+{
+	std::vector<std::string> tokens;
+	std::istringstream iss(line);
+	std::string token;
+
+	while (std::getline(iss, token, ' ')) //Space parsing
+		tokens.push_back(token);
+	if (tokens.size() <= 1)
+		return;
+	Client new_client;
+	for (int i = 0; i < tokens.size(); i++)
+	{
+		new_client.client_name = tokens[i];
+		clients_.push_back(new_client);
+	}
+}
+
+void Server::nick(Server &server, std::string str)
+{
+	if (clients_.empty())
+		return;
 	(void)str;
 }
 
-void Server::add(std::string str)
+void Server::join(Server &server, std::string line)
 {
-	(void)str;
+	std::vector<std::string> tokens;
+	std::istringstream iss(line);
+	std::string token;
+
+	while (std::getline(iss, token, ' ')) // Space parsing
+		tokens.push_back(token);
+	if (tokens.size() <= 1)
+		return;
 }
 
-void Server::nick(std::string str)
-{
-	(void)str;
-}
-
-void Server::join(std::string str)
-{
-	(void)str;
-}
-
-void Server::quit(std::string str)
+void Server::quit(Server &server, std::string str)
 {
 	(void)str;
 	std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;

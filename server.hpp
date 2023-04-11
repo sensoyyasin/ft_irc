@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
@@ -12,40 +13,28 @@
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
 #include <map>
+#include "Client.hpp"
+#include "Channel.hpp"
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_USR 100
 
-/* A sockaddr_in is a structure containing an internet address. This structure is defined in <netinet/in.h>. Here is the definition:
-struct sockaddr_in {
-        short   sin_family;
-        u_short sin_port;
-        struct  in_addr sin_addr;
-        char    sin_zero[8];
-}; */
-
-/* --System args--
-   argv[0] = filename
-   argv[1] = localhost
-   argv[2] = port */
-
-
 class Server
 {
-	public:
-		typedef void (Server::*func_ptr)(std::string);
 	private:
 		int my_port;
 		std::string my_password;
-		Server();
 	public:
 		int					new_socket;
 		int					server_fd;
 		struct sockaddr_in	address;
 		std::string			buffer;
+		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
-		std::map<std::string, func_ptr> capls_map;
+		std::vector<Client> clients_;
+		std::vector<Channel> channels_;
 
+		Server(){} //We have to use for inheritance
 		Server(int, char **);
 		~Server();
 
@@ -62,11 +51,11 @@ class Server
 		int	getmyport();
 		std::string	getmypassword();
 
-		void add(std::string);
-		void cap(std::string);
-		void nick(std::string);
-		void join(std::string);
-		void quit(std::string);
+		void add(Server &server, std::string);
+		void cap(Server &server, std::string);
+		void nick(Server &server, std::string);
+		void join(Server &server, std::string);
+		void quit(Server &server, std::string);
 };
 
 #endif
