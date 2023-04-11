@@ -4,21 +4,18 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <sys/socket.h>
 #include <netinet/in.h> /* for struct sockaddr_in */
-#include <arpa/inet.h>
 #include <unistd.h>
-#include <unistd.h>
+#include <fcntl.h>
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
-#include <sys/select.h>
-#include <sys/time.h>
-#include <errno.h> 
 #include <map>
-#include <vector>
 #define PORT 8080
 #define BUFFER_SIZE 1024
-#define MAX_CLIENTS 30
+#define MAX_USR 100
+
 /* A sockaddr_in is a structure containing an internet address. This structure is defined in <netinet/in.h>. Here is the definition:
 struct sockaddr_in {
         short   sin_family;
@@ -32,37 +29,43 @@ struct sockaddr_in {
    argv[1] = localhost
    argv[2] = port */
 
+typedef void (*func_ptr)(std::string);
+
 class Server
 {
 	private:
 		int my_port;
 		std::string my_password;
-	public:
-		//struct pollfd fds[MAX_CLIENTS];
-		int	join_key;
-		int server_fd;
-		int new_socket;
-		int addr_len;
-		int opt;
-		int rv;
-		int timeout;
-		struct sockaddr_in address;
-		std::vector<pollfd> pollfds;
-		std::string buffer;
-		//std::map<std::string, int> mymap;
-		//std::map<std::string, int>::iterator my_iterator;
-
 		Server();
+	public:
+		int					new_socket;
+		int					server_fd;
+		struct sockaddr_in	address;
+		std::string			buffer;
+		std::vector<pollfd>	pollfds;
+		std::map<std::string, func_ptr> capls_map;
+
+		Server(int, char **);
 		~Server();
 
 		void	appointment(int argc, char **argv);
-		void	socketOperations(Server &server);
-		void	socketOperations2(Server &server, char **argv);
-		void	parser(Server &server);
+		void	socketOperations();
+		void	socketOperations2(char **argv);
+		void	parser();
+
+		void	newClient();
+		void	executeCommand(int fd);
+		void	loop();
 
 		/* Getter and setter */
 		int	getmyport();
 		std::string	getmypassword();
 };
+
+void add(std::string);
+void cap(std::string);
+void nick(std::string);
+void join(std::string);
+void quit(std::string);
 
 #endif
