@@ -8,11 +8,11 @@ Server::Server(int argc, char **argv)
 	socketOperations();
 	socketOperations2(argv);
 
-	this->capls_map["ADD"] = add;
-	this->capls_map["NICK"]	= nick;
-	this->capls_map["JOIN"]	= join;
-	this->capls_map["QUIT"]	= quit;
-	this->capls_map["CAP"]	= cap;
+	capls_map["ADD"]    = &Server::add;
+	capls_map["NICK"]	= &Server::nick;
+	capls_map["JOIN"]	= &Server::join;
+	capls_map["QUIT"]	= &Server::quit;
+	capls_map["CAP"]	= &Server::cap;
 }
 
 Server::~Server(){}
@@ -100,7 +100,7 @@ void	Server::parser()
 	std::vector<std::string> my_vec(my_array, my_array + 5);
 	if (std::find(my_vec.begin(), my_vec.end(), token) == my_vec.end())
 		return ;
-	capls_map[token](args);
+	(this->*capls_map[token])(args);
 }
 
 void	Server::newClient()
@@ -143,4 +143,34 @@ void	Server::executeCommand(int fd)
 		buffer = std::string(buff);
 		parser();
 	}
+}
+
+void Server::cap(std::string str)
+{
+	(void)str;
+}
+
+void Server::add(std::string str)
+{
+    (void)str;
+	std::cout << "func1: " << std::endl;
+}
+
+void Server::nick(std::string str)
+{
+    (void)str;
+	std::cout << "func2: " << std::endl;
+}
+
+void Server::join(std::string str)
+{
+    (void)str;
+	std::cout << "func3: " << std::endl;
+}
+
+void Server::quit(std::string str)
+{
+    (void)str;
+	std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
+		exit(1);
 }

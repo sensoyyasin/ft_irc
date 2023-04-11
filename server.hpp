@@ -29,10 +29,11 @@ struct sockaddr_in {
    argv[1] = localhost
    argv[2] = port */
 
-typedef void (*func_ptr)(std::string);
-
 class Server
 {
+	public:
+		typedef void (Server::*func_ptr)(std::string);
+
 	private:
 		int my_port;
 		std::string my_password;
@@ -57,15 +58,16 @@ class Server
 		void	executeCommand(int fd);
 		void	loop();
 
+		void	add(std::string);
+		void	cap(std::string);
+		void	nick(std::string);
+		void	join(std::string);
+		void	quit(std::string);
+
 		/* Getter and setter */
 		int	getmyport();
 		std::string	getmypassword();
 };
 
-void add(std::string);
-void cap(std::string);
-void nick(std::string);
-void join(std::string);
-void quit(std::string);
 
 #endif
