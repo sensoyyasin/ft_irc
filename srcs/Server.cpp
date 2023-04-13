@@ -75,8 +75,7 @@ void	Server::socketOperations2(char **argv)
 
 	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
 	{
-		perror("bind ");
-		// std::cerr << "Error binding to port " << std::endl;
+		std::cerr << "Error binding to port " << std::endl;
 		close(server_fd);
 		exit(1);
 	}
@@ -90,27 +89,6 @@ void	Server::socketOperations2(char **argv)
 	pollfds.push_back((pollfd){server_fd, POLLIN, 0});
 }
 
-void	Server::parser(std::string command, std::string args)
-{
-	std::cout << "*" << command << "*" << std::endl;
-	std::cout << "*" << args << "*" << std::endl;
-	if (command == "USER")
-	{
-		this->my_nick = args;
-		//std::cout << this->my_nick << std::endl; ->ysensoy
-	}
-	if (cap_ls[0] == command)
-		add(*this, args);
-	else if (cap_ls[1] == command)
-		nick(*this, args);
-	else if (cap_ls[2] == command)
-		join(*this, args);
-	else if (cap_ls[3] == command)
-		quit(*this, args);
-	else if (cap_ls[4] == command)
-		cap(*this, args);
-}
-
 void	Server::newClient()
 {
 	buffer.clear();
@@ -119,7 +97,8 @@ void	Server::newClient()
 	if (this->new_socket < 0)
 	{
 		std::cerr << "Accept failed" << std::endl;
-		return ;
+		close(server_fd);
+		exit(1);
 	}
 	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
 	std::map<int, std::string>::iterator it;
@@ -127,10 +106,8 @@ void	Server::newClient()
 	while (it != cap_ls.end())
 	{
 		std::string str = "/";
-		str += it->second;
-		str += "\r\n";
-		if (send(this->new_socket, str.c_str(), str.size(), 0) != str.size())
-			std::cerr << "Error" << std::endl;
+		str += it->second += "\r\n";
+		send(this->new_socket, str.c_str(), str.size(), 0);
 		++it;
 	}
 }
@@ -168,6 +145,26 @@ void	Server::executeCommand(int fd)
 	}
 }
 
+void	Server::parser(std::string command, std::string args)
+{
+	std::cout << "*" << command << "*" << std::endl;
+	std::cout << "*" << args << "*" << std::endl;
+	if (command == "USER")
+		this->my_nick = args; //->ysensoy.
+	// else if (command == "QUIT")
+	// 	exit(1);
+	else if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
+		add(*this, args);
+	else if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
+		nick(*this, args);
+	else if (!strncmp(cap_ls[2].c_str(), command.c_str(), 4))
+		join(*this, args);
+	else if (!strncmp(cap_ls[3].c_str(), command.c_str(), 4))
+		quit(*this, args);
+	else if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
+		cap(*this, args);
+}
+
 
 void Server::cap(Server &server, std::string line)
 {
@@ -194,12 +191,8 @@ void Server::add(Server &server, std::string line)
 
 void Server::nick(Server &server, std::string str)
 {
-	if (clients_.empty())
-		return;
-
-	this->my_nick += "\r\n";
-	if (send(this->new_socket, this->my_nick.c_str(), this->my_nick.size(), 0) != this->my_nick.size())
-		std::cerr << "Error" << std::endl;
+	str += "\r\n";
+	send(this->new_socket, str.c_str(), str.size(), 0);
 }
 
 void Server::join(Server &server, std::string line)
@@ -208,6 +201,9 @@ void Server::join(Server &server, std::string line)
 	std::istringstream iss(line);
 	std::string token;
 
+	/*  -> Join the channel. */
+	std::string a = ":ali!localhost JOIN " + line + "\r\n";
+	send(this->new_socket, a.c_str(), a.size(), 0);
 	while (std::getline(iss, token, ' ')) // Space parsing
 		tokens.push_back(token);
 	if (tokens.size() <= 1)
@@ -216,7 +212,7 @@ void Server::join(Server &server, std::string line)
 
 void Server::quit(Server &server, std::string str)
 {
-	(void)str;
 	std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
 		exit(1);
+	(void)str;
 }
