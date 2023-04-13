@@ -1,6 +1,7 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+#include <sstream>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -29,19 +30,19 @@ class Server
 		int					server_fd;
 		struct sockaddr_in	address;
 		std::string			buffer;
+		std::string			my_nick;
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
 		std::vector<Client> clients_;
 		//std::vector<Channel> channels_;
 
-		Server(){} //We have to use for inheritance
 		Server(int, char **);
 		~Server();
 
 		void	appointment(int argc, char **argv);
 		void	socketOperations();
 		void	socketOperations2(char **argv);
-		void	parser();
+		void	parser(std::string, std::string);
 
 		void	newClient();
 		void	executeCommand(int fd);

@@ -60,9 +60,7 @@ void	Server::socketOperations()
 		exit(1);
 	}
 	int opt = 1;
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)) != 0)
-		std::cout << "Setsockopt set up and connecting to server..." << std::endl;
-	else
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)) < 0)
 	{
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
 		exit(1);
@@ -77,40 +75,40 @@ void	Server::socketOperations2(char **argv)
 
 	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
 	{
-		std::cerr << "Error binding to port " << std::endl;
+		perror("bind ");
+		// std::cerr << "Error binding to port " << std::endl;
+		close(server_fd);
 		exit(1);
 	}
 
 	if (listen(server_fd, MAX_USR) < 0)
 	{
 		std::cerr << "listen failed" << std::endl;
+		close(server_fd);
 		exit(1);
 	}
 	pollfds.push_back((pollfd){server_fd, POLLIN, 0});
 }
 
-void	Server::parser()
+void	Server::parser(std::string command, std::string args)
 {
-	std::string str = buffer;
-	int	del_place = str.find(" ");
-	std::string token = str.substr(0, del_place);
-	std::string args = str.substr(del_place + 1);
-
-	 if (cap_ls[0].find(token) != std::string::npos)
-	 	add(*this, args);
-	 else if (cap_ls[1].find(token) != std::string::npos)
-		nick(*this, args);
-	 else if (cap_ls[2].find(token) != std::string::npos)
-		join(*this, args);
-	 else if (cap_ls[3].find(token) != std::string::npos)
-		quit(*this, args);
-	 else if (cap_ls[4].find(token) != std::string::npos)
-		cap(*this, args);
-	else
+	std::cout << "*" << command << "*" << std::endl;
+	std::cout << "*" << args << "*" << std::endl;
+	if (command == "USER")
 	{
-		std::cerr << "Invalid commands: " << token << std::endl;
-		return;
+		this->my_nick = args;
+		//std::cout << this->my_nick << std::endl; ->ysensoy
 	}
+	if (cap_ls[0] == command)
+		add(*this, args);
+	else if (cap_ls[1] == command)
+		nick(*this, args);
+	else if (cap_ls[2] == command)
+		join(*this, args);
+	else if (cap_ls[3] == command)
+		quit(*this, args);
+	else if (cap_ls[4] == command)
+		cap(*this, args);
 }
 
 void	Server::newClient()
@@ -130,7 +128,7 @@ void	Server::newClient()
 	{
 		std::string str = "/";
 		str += it->second;
-		str += "\n\r";
+		str += "\r\n";
 		if (send(this->new_socket, str.c_str(), str.size(), 0) != str.size())
 			std::cerr << "Error" << std::endl;
 		++it;
@@ -139,7 +137,7 @@ void	Server::newClient()
 
 void	Server::executeCommand(int fd)
 {
-	if (buffer.find("\n\r"))
+	while (buffer.find("\r\n"))
 	{
 		buffer.clear();
 		char buff[BUFFER_SIZE];
@@ -151,9 +149,25 @@ void	Server::executeCommand(int fd)
 			return ;
 		}
 		buffer = std::string(buff);
-		parser();
+		while (buffer.size() > 0)
+		{
+			std::string command = "";
+			std::string args = "";
+			int i = 0;
+			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
+				command += buffer[i++]; //first ->command
+			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
+				i++;
+			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
+				args += buffer[i++]; //second ->arg
+			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
+				i++;
+			parser(command, args);
+			buffer.erase(0, i);
+		}
 	}
 }
+
 
 void Server::cap(Server &server, std::string line)
 {
@@ -182,7 +196,10 @@ void Server::nick(Server &server, std::string str)
 {
 	if (clients_.empty())
 		return;
-	(void)str;
+
+	this->my_nick += "\r\n";
+	if (send(this->new_socket, this->my_nick.c_str(), this->my_nick.size(), 0) != this->my_nick.size())
+		std::cerr << "Error" << std::endl;
 }
 
 void Server::join(Server &server, std::string line)
