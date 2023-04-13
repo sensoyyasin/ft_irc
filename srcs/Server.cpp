@@ -191,8 +191,9 @@ void Server::add(Server &server, std::string line)
 
 void Server::nick(Server &server, std::string str)
 {
-	str += "\r\n";
-	send(this->new_socket, str.c_str(), str.size(), 0);
+	/* :yasin!localhost NICK :ali */
+	std::string b = ":berk!localhost NICK " + str + "\r\n";
+	send(this->new_socket, b.c_str(), b.size(), 0);
 }
 
 void Server::join(Server &server, std::string line)
@@ -201,7 +202,8 @@ void Server::join(Server &server, std::string line)
 	std::istringstream iss(line);
 	std::string token;
 
-	/*  -> Join the channel. */
+	/*  -> Join the channel. 
+	say the username is yasin hostname is localhost what would be the join commands reply*/
 	std::string a = ":ali!localhost JOIN " + line + "\r\n";
 	send(this->new_socket, a.c_str(), a.size(), 0);
 	while (std::getline(iss, token, ' ')) // Space parsing
