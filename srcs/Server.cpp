@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
+/*   Updated: 2023/04/23 22:16:33 by yasinsensoy      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/Channel.hpp"
 #include "../headers/Client.hpp"
 #include "../headers/Server.hpp"
@@ -202,7 +214,7 @@ void Server::join(Server &server, std::string line)
 	std::istringstream iss(line);
 	std::string token;
 
-	/*  -> Join the channel. 
+	/*  -> Join the channel.
 	say the username is yasin hostname is localhost what would be the join commands reply*/
 	std::string a = ":ali!localhost JOIN " + line + "\r\n";
 	send(this->new_socket, a.c_str(), a.size(), 0);
