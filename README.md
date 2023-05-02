@@ -10,7 +10,9 @@ Client software exists for various operating systems or software packages, as we
 
 ![1280px-Ircnetz-Schema svg](https://user-images.githubusercontent.com/73845925/235754479-3b10f34f-0b5d-4e1b-af07-f27a7ae1ee26.png)
 
-#What is Socket?
+
+# What is Socket and What is Socket Programming?
+
 Sockets are commonly used for client and server interaction. 
 Typical system configuration places the server on one machine, with the clients on other machines. 
 The clients connect to the server, exchange information, and then disconnect.
