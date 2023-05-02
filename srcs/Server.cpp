@@ -6,7 +6,7 @@
 /*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/04/23 22:16:33 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/02 08:12:55 by yasinsensoy      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,8 @@ void	Server::parser(std::string command, std::string args)
 {
 	std::cout << "*" << command << "*" << std::endl;
 	std::cout << "*" << args << "*" << std::endl;
-	if (command == "USER")
-		this->my_nick = args; //->ysensoy.
-	// else if (command == "QUIT")
-	// 	exit(1);
+	if (command == "NICK")
+		this->my_nick = args;
 	else if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
 		add(*this, args);
 	else if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
@@ -191,9 +189,11 @@ void Server::add(Server &server, std::string line)
 
 	while (std::getline(iss, token, ' ')) //Space parsing
 		tokens.push_back(token);
+	//1 tane kullanicidan azsa patlat.
 	if (tokens.size() <= 1)
 		return;
 	Client new_client;
+	//Bircok kullanıcıysa [add] [a b c] ekle hepsini 2 argtan daha fazla olabilir.
 	for (int i = 0; i < tokens.size(); i++)
 	{
 		new_client.client_name = tokens[i];
@@ -204,8 +204,11 @@ void Server::add(Server &server, std::string line)
 void Server::nick(Server &server, std::string str)
 {
 	/* :yasin!localhost NICK :ali */
-	std::string b = ":berk!localhost NICK " + str + "\r\n";
+	std::string b = ":" + this->my_nick + "!localhost NICK " + str + "\r\n";
 	send(this->new_socket, b.c_str(), b.size(), 0);
+	this->my_nick.clear();
+	this->my_nick = str;
+	str.clear();
 }
 
 void Server::join(Server &server, std::string line)
@@ -214,14 +217,19 @@ void Server::join(Server &server, std::string line)
 	std::istringstream iss(line);
 	std::string token;
 
-	/*  -> Join the channel.
-	say the username is yasin hostname is localhost what would be the join commands reply*/
-	std::string a = ":ali!localhost JOIN " + line + "\r\n";
-	send(this->new_socket, a.c_str(), a.size(), 0);
 	while (std::getline(iss, token, ' ')) // Space parsing
 		tokens.push_back(token);
 	if (tokens.size() <= 1)
 		return;
+	//bircok kanala katıtlma. Join 1 2 3
+	// for (int i = 0; i < tokens.size(); i++)
+	// {
+	// 	std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
+	// 	send(this->new_socket, a.c_str(), a.size(), 0);
+	// 	this->my_nick.clear();
+	// 	this->my_nick = line;
+	// 	line.clear();
+	// }
 }
 
 void Server::quit(Server &server, std::string str)
