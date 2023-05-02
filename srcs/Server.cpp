@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 09:13:10 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/02 16:23:03 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,31 +138,25 @@ void	Server::executeCommand(int fd)
 			return ;
 		}
 		buffer = std::string(buff);
-		while (buffer.size() > 0)
+		int i = 0;
+		while (i < buffer.size())
 		{
 			std::string command = "";
 			std::string args = "";
-			int i = 0;
 			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
 				command += buffer[i++]; //first ->command
 			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
 				i++;
-			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-				args += buffer[i++]; //second ->arg
-			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
-				i++;
-			parser(command, args);
+			while (i < buffer.size())
+				args += buffer[i++];
+			executable(command, args);
 			buffer.erase(0, i);
 		}
 	}
 }
 
-void	Server::parser(std::string command, std::string args)
+void	Server::executable(std::string command, std::string args)
 {
-	std::cout << "*" << command << "*" << std::endl;
-	std::cout << "*" << args << "*" << std::endl;
-	if (command == "NICK")
-		this->my_nick = args;
 	if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
 		add(*this, args);
 	if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
@@ -178,76 +172,24 @@ void	Server::parser(std::string command, std::string args)
 
 void Server::cap(Server &server, std::string line)
 {
-	(void)line; // protected our segmentation fault.
-}
-
-void Server::add(Server &server, std::string line)
-{
-	std::vector<std::string> tokens;
-	std::istringstream iss(line);
-	std::string token;
-
-	while (std::getline(iss, token, ' ')) //Space parsing
-		tokens.push_back(token);
-	//1 tane kullanicidan azsa patlat.
-	if (tokens.size() <= 1)
-		return;
-	Client new_client;
-	//Bircok kullanıcıysa [add] [a b c] ekle hepsini 2 argtan daha fazla olabilir.
-	for (int i = 0; i < tokens.size(); i++)
-	{
-		new_client.client_name = tokens[i];
-		clients_.push_back(new_client);
-	}
-}
-
-void Server::nick(Server &server, std::string str)
-{
-	/* :yasin!localhost NICK :ali */
-	std::string b = ":" + this->my_nick + "!localhost NICK " + str + "\r\n";
-	send(this->new_socket, b.c_str(), b.size(), 0);
-	this->my_nick.clear();
-	this->my_nick = str;
-	str.clear();
-}
-
-void Server::join(Server &server, std::string line)
-{
-	std::vector<std::string> tokens;
-	std::istringstream iss(line);
-	std::string token;
-
-	while (std::getline(iss, token, ' ')) // Space parsing
-		tokens.push_back(token);
-	if (tokens.size() <= 1)
-	{
-		std::cout << "No Channel Spescified" << std::endl;
-		return;
-	}
-	Channel channel;
-	if (tokens.size() == 2)
-	{
-		std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
-		send(this->new_socket, a.c_str(), a.size(), 0);
-		channel.my_channels.push_back(tokens[1]);
-		return;
-	}
-	//bircok kanala katıtlma. Join 1 2 3
+	std::vector<std::string> my_vec;
 	int i = 0;
-	while (i < tokens.size() && i > 2)
+	while (line.size() > i)
 	{
-		std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
-		send(this->new_socket, a.c_str(), a.size(), 0);
-		channel.my_channels.push_back(tokens[i]);
-		this->my_nick.clear();
-		line.clear();
+		std::string command = "";
+		std::string args = "";
+		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
+			command += buffer[i++]; //first ->command
+		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
+			i++;
+		my_vec.push_back(command);
+	}
+	i = 0;
+	while (my_vec.size() > i)
+	{
+		if (my_vec[i] == "USER" || my_vec[i] == "NICK")
+			executable(my_vec[i], my_vec[i + 1]);
+		std::cout << my_vec[i] << std::endl; 
 		i++;
 	}
-}
-
-void Server::quit(Server &server, std::string str)
-{
-	std::cout << "\033[1;91mLeaving...\033[0m" << std::endl;
-		exit(1);
-	(void)str;
 }
