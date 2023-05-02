@@ -18,7 +18,7 @@ void Server::join(Server &server, std::string buffer)
 	{
 		if (my_vec[i][0] != '#' && my_vec[i][0] != '&')
 		{
-			std::cerr << "Hata" << std::endl;
+			std::cerr << "Error couldn't connect the channel" << std::endl;
 			continue;
 		}
 		my_vec[i] = my_vec[i].substr(1, my_vec[i].size() - 1);

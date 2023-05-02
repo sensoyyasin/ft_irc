@@ -6,7 +6,7 @@
 /*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 16:23:03 by ysensoy          ###   ########.fr       */
+/*   Updated: 2023/05/02 16:35:19 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ Server::Server(int argc, char **argv)
 	cap_ls[2] =  "JOIN";
 	cap_ls[3] =  "QUIT";
 	cap_ls[4] =  "CAP";
+	cap_ls[5] =  "KICK";
 }
 
 Server::~Server(){}
@@ -167,6 +168,8 @@ void	Server::executable(std::string command, std::string args)
 		quit(*this, args);
 	if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
 		cap(*this, args);
+	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
+	// 	kick(*this, args);
 }
 
 
