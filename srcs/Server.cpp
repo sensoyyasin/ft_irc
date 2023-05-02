@@ -6,7 +6,7 @@
 /*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 08:12:55 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/02 09:13:10 by yasinsensoy      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,15 +163,15 @@ void	Server::parser(std::string command, std::string args)
 	std::cout << "*" << args << "*" << std::endl;
 	if (command == "NICK")
 		this->my_nick = args;
-	else if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
+	if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
 		add(*this, args);
-	else if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
+	if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
 		nick(*this, args);
-	else if (!strncmp(cap_ls[2].c_str(), command.c_str(), 4))
+	if (!strncmp(cap_ls[2].c_str(), command.c_str(), 4))
 		join(*this, args);
-	else if (!strncmp(cap_ls[3].c_str(), command.c_str(), 4))
+	if (!strncmp(cap_ls[3].c_str(), command.c_str(), 4))
 		quit(*this, args);
-	else if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
+	if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
 		cap(*this, args);
 }
 
@@ -220,16 +220,29 @@ void Server::join(Server &server, std::string line)
 	while (std::getline(iss, token, ' ')) // Space parsing
 		tokens.push_back(token);
 	if (tokens.size() <= 1)
+	{
+		std::cout << "No Channel Spescified" << std::endl;
 		return;
+	}
+	Channel channel;
+	if (tokens.size() == 2)
+	{
+		std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
+		send(this->new_socket, a.c_str(), a.size(), 0);
+		channel.my_channels.push_back(tokens[1]);
+		return;
+	}
 	//bircok kanala katıtlma. Join 1 2 3
-	// for (int i = 0; i < tokens.size(); i++)
-	// {
-	// 	std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
-	// 	send(this->new_socket, a.c_str(), a.size(), 0);
-	// 	this->my_nick.clear();
-	// 	this->my_nick = line;
-	// 	line.clear();
-	// }
+	int i = 0;
+	while (i < tokens.size() && i > 2)
+	{
+		std::string a = ":" + this->my_nick + "!localhost JOIN " + line + "\r\n";
+		send(this->new_socket, a.c_str(), a.size(), 0);
+		channel.my_channels.push_back(tokens[i]);
+		this->my_nick.clear();
+		line.clear();
+		i++;
+	}
 }
 
 void Server::quit(Server &server, std::string str)
