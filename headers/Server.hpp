@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/04/23 22:16:43 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/02 16:34:52 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class Server
 		void	appointment(int argc, char **argv);
 		void	socketOperations();
 		void	socketOperations2(char **argv);
-		void	parser(std::string, std::string);
+		void	executable(std::string, std::string);
 
 		void	newClient();
 		void	executeCommand(int fd);
@@ -69,6 +69,7 @@ class Server
 		void nick(Server &server, std::string);
 		void join(Server &server, std::string);
 		void quit(Server &server, std::string);
+		void kick(Server &server, std::string);
 };
 
 #endif
