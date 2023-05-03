@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 16:35:19 by ysensoy          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../headers/Channel.hpp"
 #include "../headers/Client.hpp"
 #include "../headers/Server.hpp"
@@ -28,6 +16,7 @@ Server::Server(int argc, char **argv)
 	cap_ls[3] =  "QUIT";
 	cap_ls[4] =  "CAP";
 	cap_ls[5] =  "KICK";
+	cap_ls[6] =  "BOT";
 }
 
 Server::~Server(){}
@@ -114,6 +103,10 @@ void	Server::newClient()
 		exit(1);
 	}
 	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
+	Client *client = new Client(this->new_socket, ntohs(address.sin_port));
+	this->user_count++;
+	std::cout << "User connected: " << this->user_count  << "." << std::endl;
+
 	std::map<int, std::string>::iterator it;
 	it = cap_ls.begin();
 	while (it != cap_ls.end())
@@ -168,8 +161,8 @@ void	Server::executable(std::string command, std::string args)
 		quit(*this, args);
 	if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
 		cap(*this, args);
-	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
-	// 	kick(*this, args);
+	if (!strncmp(cap_ls[5].c_str(), command.c_str(), 3))
+		bot(*this, args);
 }
 
 
@@ -192,7 +185,7 @@ void Server::cap(Server &server, std::string line)
 	{
 		if (my_vec[i] == "USER" || my_vec[i] == "NICK")
 			executable(my_vec[i], my_vec[i + 1]);
-		std::cout << my_vec[i] << std::endl; 
+		std::cout << my_vec[i] << std::endl;
 		i++;
 	}
 }
