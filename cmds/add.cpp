@@ -1,9 +1,8 @@
 #include "../headers/Server.hpp"
-#include "../headers/Client.hpp"
-#include "../headers/Channel.hpp"
 
 void Server::add(Server &server, std::string line)
 {
+	this->user_count++;
 	// std::vector<std::string> tokens;
 	// std::istringstream iss(line);
 	// std::string token;
@@ -22,4 +21,5 @@ void Server::add(Server &server, std::string line)
 	// 	new_client.client_name = tokens[i];
 	// 	clients_.push_back(new_client);
 	// }
+	std::cout << "User sayisi:" << this->user_count << std::endl;
 }

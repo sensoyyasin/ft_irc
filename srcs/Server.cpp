@@ -17,6 +17,8 @@ Server::Server(int argc, char **argv)
 	cap_ls[4] =  "CAP";
 	cap_ls[5] =  "KICK";
 	cap_ls[6] =  "BOT";
+	this->channel_count = 0;
+	this->user_count = 0;
 }
 
 Server::~Server(){}
@@ -67,6 +69,16 @@ void	Server::socketOperations()
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
 		exit(1);
 	}
+	if (setsockopt(server_fd, IPPROTO_TCP, TCP_NODELAY , &opt, sizeof(opt)) < 0)
+	{
+		std::cerr << "Setsockopt couldn't connect..." << std::endl;
+		exit(1);
+	}
+	if (fcntl(server_fd, F_SETFL, O_NONBLOCK) < 0)
+	{
+		std::cerr << "Setsockopt couldn't connect..." << std::endl;
+		exit(1);
+	}
 }
 
 void	Server::socketOperations2(char **argv)
@@ -102,6 +114,7 @@ void	Server::newClient()
 		close(server_fd);
 		exit(1);
 	}
+	
 	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
 	Client *client = new Client(this->new_socket, ntohs(address.sin_port));
 	this->user_count++;
@@ -109,13 +122,13 @@ void	Server::newClient()
 
 	std::map<int, std::string>::iterator it;
 	it = cap_ls.begin();
+	std::string str;
 	while (it != cap_ls.end())
 	{
-		std::string str = "/";
-		str += it->second += "\r\n";
-		send(this->new_socket, str.c_str(), str.size(), 0);
+		str.append('/' + it->second+"\n");
 		++it;
 	}
+	send(this->new_socket, str.c_str(), str.size(), 0);
 }
 
 void	Server::executeCommand(int fd)
@@ -128,8 +141,8 @@ void	Server::executeCommand(int fd)
 		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
 		if (bytes_received < 0)
 		{
-			std::cerr << "Receive failed" << std::endl;
-			return ;
+			std::cerr << "Receive ended" << std::endl;
+			break;
 		}
 		buffer = std::string(buff);
 		int i = 0;

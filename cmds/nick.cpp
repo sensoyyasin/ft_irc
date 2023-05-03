@@ -1,6 +1,4 @@
 #include "../headers/Server.hpp"
-#include "../headers/Client.hpp"
-#include "../headers/Channel.hpp"
 
 void Server::nick(Server &server, std::string buffer)
 {
