@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 16:34:52 by ysensoy          ###   ########.fr       */
+/*   Updated: 2023/05/03 09:10:18 by yasinsensoy      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ class Server
 		struct sockaddr_in	address;
 		std::string			buffer;
 		std::string			my_nick;
+		int					user_count;
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
-		std::vector<Client> clients_;
+		//std::vector<Client> clients_;
 		//std::vector<Channel> channels_;
 
 		Server(int, char **);
@@ -69,7 +70,7 @@ class Server
 		void nick(Server &server, std::string);
 		void join(Server &server, std::string);
 		void quit(Server &server, std::string);
-		void kick(Server &server, std::string);
+		void bot(Server &server, std::string);
 };
 
 #endif

@@ -1,25 +1,26 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Channel.hpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/23 22:16:37 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 08:57:56 by yasinsensoy      ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
 #include "../headers/Server.hpp"
+#include "../headers/Client.hpp"
 
 class Channel
 {
-public:
-	std::string channel_name;
-	std::vector<std::string> my_channels;
+	private:
+		int clientCount;
+		std::string channelName;
+		std::string	k;
+		int l;
+		bool n;
+		//Client *channelAdmin;
+	public:
+		Channel();
+		~Channel();
+		//std::vector<Client *> channelClients;
+		//Client *getAdmin();
+
+		int getclientCount();
+		std::string getchannelName();
 };
 
 #endif
