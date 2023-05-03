@@ -36,12 +36,12 @@ void Server::join(Server &server, std::string buffer)
 		}
 		if (j == this->channels_.size())
 		{
-			std::string b = ":" + this->my_nick + "!localhost JOIN " + my_vec[i] + "\r\n";
 			Channel c(my_vec[i]);
 			this->channels_.push_back(c);
-			send(this->new_socket, b.c_str(), b.size(), 0);
-			b.clear();
 		}
+		std::string b = ":" + this->my_nick + "!localhost JOIN " + my_vec[i] + "\r\n";
+		send(this->new_socket, b.c_str(), b.size(), 0);
+		b.clear();
 	}
 	std::cerr << "\033[1;96mNumber of channel:\033[0m" << this->channels_.size() << std::endl;
 	buffer.clear();

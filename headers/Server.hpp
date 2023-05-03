@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/03 14:27:53 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/03 17:03:17 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
 #include <map>
+#include <netinet/tcp.h>
 #include "Client.hpp"
 #include "Channel.hpp"
+
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_USR 100

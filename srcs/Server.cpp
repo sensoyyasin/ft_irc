@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/03 14:43:09 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/03 17:17:27 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,15 @@ void	Server::loop()
 	while (1)
 	{
 		poll(pollfds.begin().base(), pollfds.size(), -1);
-		for (size_t i = 0 ; i < pollfds.size() ; i++)
+		for (size_t i = 0 ; i < 3 ; i++)//for (size_t i = 0 ; i < pollfds.size() ; i++)
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
-				//if (pollfds[i].fd == pollfds[0].fd)
-				//{
+				if (pollfds[i].fd == pollfds[0].fd)
+				{
 					newClient();
-					//break ;
-				//}
+					break ;
+				}
 				executeCommand(pollfds[i].fd);
 			}
 		}
@@ -74,6 +74,16 @@ void	Server::socketOperations()
 	}
 	int opt = 1;
 	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)) < 0)
+	{
+		std::cerr << "Setsockopt couldn't connect..." << std::endl;
+		exit(1);
+	}
+	if (setsockopt(server_fd, IPPROTO_TCP, TCP_NODELAY , &opt, sizeof(opt)) < 0)
+	{
+		std::cerr << "Setsockopt couldn't connect..." << std::endl;
+		exit(1);
+	}
+	if (fcntl(server_fd, F_SETFL, O_NONBLOCK) < 0)
 	{
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
 		exit(1);
@@ -114,21 +124,29 @@ void	Server::newClient()
 		close(server_fd);
 		exit(1);
 	}
-	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
+	this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
 
 	Client c(this->new_socket, this->my_port);
 	this->clients_.push_back(c);
 	std::cout << "User connected: " << this->clients_.size() << "." << std::endl;
+	std::cout << "Fds size: " << this->pollfds.size() << "." << std::endl;
 
 	std::map<int, std::string>::iterator it;
 	it = cap_ls.begin();
+	std::string str;
 	while (it != cap_ls.end())
 	{
-		std::string str = "/";
-		str += it->second += "\r\n";
-		send(this->new_socket, str.c_str(), str.size(), 0);
+		str.append('/' + it->second+"\n");
 		++it;
 	}
+	send(this->new_socket, str.c_str(), str.size(), 0);
+	// while (it != cap_ls.end())
+	// {
+	// 	std::string str = "/";
+	// 	str += it->second += "\r\n";
+	// 	send(this->new_socket, str.c_str(), str.size(), 0);
+	// 	++it;
+	// }
 }
 
 void	Server::executeCommand(int fd)
@@ -139,9 +157,10 @@ void	Server::executeCommand(int fd)
 		char buff[BUFFER_SIZE];
 		memset(buff, 0, BUFFER_SIZE);
 		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
+		std::cout << "Received message: " << buff << std::endl;
 		if (bytes_received < 0)
 		{
-			std::cerr << "Receive failed" << std::endl;
+			std::cerr << "Receive ended" << std::endl;
 			return ;
 		}
 		buffer = std::string(buff);
