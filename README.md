@@ -26,7 +26,3 @@ The server performs the client's request and sends the reply back to the client.
 
 ![socket](https://user-images.githubusercontent.com/73845925/230378632-a7e795d3-e6e4-406a-a50d-5f37f4883da1.png)
 
-# The Social Graph
-
-![1600px-Haskell-current](https://user-images.githubusercontent.com/73845925/235835405-a18ecb4c-caeb-45d2-bc49-72bc48ca9c76.png)
-
