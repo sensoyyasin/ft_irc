@@ -14,7 +14,7 @@ class Channel
 		bool n;
 		//Client *channelAdmin;
 	public:
-		Channel();
+		Channel(std::string channelName);
 		~Channel();
 		//std::vector<Client *> channelClients;
 		//Client *getAdmin();

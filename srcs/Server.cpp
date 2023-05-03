@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/02 16:35:19 by ysensoy          ###   ########.fr       */
+/*   Updated: 2023/05/03 14:43:09 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ void	Server::loop()
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
-				if (pollfds[i].fd == pollfds[0].fd)
-				{
+				//if (pollfds[i].fd == pollfds[0].fd)
+				//{
 					newClient();
-					break ;
-				}
+					//break ;
+				//}
 				executeCommand(pollfds[i].fd);
 			}
 		}
@@ -107,6 +107,7 @@ void	Server::newClient()
 	buffer.clear();
 	int	addr_len = sizeof(address);
 	this->new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t *)&addr_len);
+	std::cout << "New socket: " << this->new_socket << std::endl;
 	if (this->new_socket < 0)
 	{
 		std::cerr << "Accept failed" << std::endl;
@@ -114,6 +115,11 @@ void	Server::newClient()
 		exit(1);
 	}
 	pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
+
+	Client c(this->new_socket, this->my_port);
+	this->clients_.push_back(c);
+	std::cout << "User connected: " << this->clients_.size() << "." << std::endl;
+
 	std::map<int, std::string>::iterator it;
 	it = cap_ls.begin();
 	while (it != cap_ls.end())

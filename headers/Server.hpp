@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/03 09:10:18 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/03 14:27:53 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,14 @@
 #include <netdb.h> /* struct hostent *server */
 #include <sys/poll.h>
 #include <map>
-#include "../headers/Client.hpp"
-#include "../headers/Channel.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 #define PORT 8080
 #define BUFFER_SIZE 1024
 #define MAX_USR 100
+
+class Channel;
+class Client;
 
 class Server
 {
@@ -46,8 +49,8 @@ class Server
 		int					user_count;
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
-		//std::vector<Client> clients_;
-		//std::vector<Channel> channels_;
+		std::vector<Client> clients_;
+		std::vector<Channel> channels_;
 
 		Server(int, char **);
 		~Server();
