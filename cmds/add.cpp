@@ -1,25 +1,30 @@
 #include "../headers/Server.hpp"
 
-void Server::add(Server &server, std::string line)
+void Server::add(Server &server, std::string buffer)
 {
-	this->user_count++;
-	// std::vector<std::string> tokens;
-	// std::istringstream iss(line);
-	// std::string token;
-
-	// while (std::getline(iss, token, ' ')) // boşlukları parselleme
-	// 	tokens.push_back(token);
-
-	// // Eğer sadece bir tane kullanıcı varsa, işlem yapma
-	// if (tokens.size() <= 1)
-	// 	return;
-
-	// // Birden fazla kullanıcı varsa vektöre ekle
-	// for (int i = 1; i < tokens.size(); i++)
+	// std::vector<std::string> my_vec;
+	// std::string command = "";
+	// int i = 0;
+	// while (buffer.size() > i)
 	// {
-	// 	Client new_client;
-	// 	new_client.client_name = tokens[i];
-	// 	clients_.push_back(new_client);
+	// 	std::string command = "";
+	// 	while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
+	// 		command += buffer[i++]; //first ->command
+	// 	while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
+	// 		i++;
+	// 	my_vec.push_back(command);
 	// }
-	std::cout << "User sayisi:" << this->user_count << std::endl;
+
+	// Client new_client(this->user_count, this->my_port);
+	// new_client.setNickName(my_vec[1]);
+	// new_client.setRealName(my_vec[2]);
+
+	// this->clients_.push_back(new_client);
+	// this->user_count++;
+
+	// std::string b = ":" + this->my_nick + "!localhost ADD " + my_vec[1] + "\r\n";
+	// for (std::vector<Client>::iterator it = this->clients_.begin(); it != this->clients_.end(); ++it)
+	// {
+	// 	send(this->new_socket, b.c_str(), b.length(), 0);
+	// }
 }
