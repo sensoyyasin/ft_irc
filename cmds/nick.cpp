@@ -4,16 +4,34 @@
 
 void Server::nick_change(std::string command_n, std::string buffer)
 {
-	(void)command_n;
+	std::cout<<"nick_change_command:*"<<command_n<<"*"<<std::endl;
 	std::string command = "";
 	int i = 0;
 	while (i < buffer.size() && (buffer[i] > 32))
 		command += buffer[i++]; //first ->command
-	std::string b = ":" + this->my_nick + "!localhost NICK " + command + "\r\n";
-	send(this->new_socket, b.c_str(), b.size(), 0);
-	this->my_nick.clear();
-	this->my_nick = command;
-	buffer.clear();
+	if(this->client_ret(this->new_socket) && !this->client_nick_check(command))
+	{
+		std::cout<<"Will change the nick"<<std::endl;
+		std::string b = ":" + this->client_ret(this->new_socket)->getNickName() + "!localhost NICK " + command + "\r\n";
+		send(this->new_socket, b.c_str(), b.size(), 0);
+		this->client_ret(this->new_socket)->setNickName(command);
+		buffer.clear();
+	}
+	else
+	{
+		std::cout<<"There is some user has the same nick name or user doesn't exist!"<<std::endl;
+	}
+
+	// (void)command_n;
+	// std::string command = "";
+	// int i = 0;
+	// while (i < buffer.size() && (buffer[i] > 32))
+	// 	command += buffer[i++]; //first ->command
+	// std::string b = ":" + this->my_nick + "!localhost NICK " + command + "\r\n";
+	// send(this->new_socket, b.c_str(), b.size(), 0);
+	// this->my_nick.clear();
+	// this->my_nick = command;
+	// buffer.clear();
 }
 
 

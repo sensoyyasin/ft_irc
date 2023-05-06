@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 14:52:26 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 15:47:24 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,4 @@ void	Server::newClient()
 		// }
 	}
 	
-}
-
-int Server::client_check(std::string nickname)
-{
-	std::vector<Client>::iterator it = this->clients_.begin();
-	std::vector<Client>::iterator ite = this->clients_.end();
-	for (; it != ite; it++)
-	{
-		if((*it).getNickName() == nickname)
-			return (1);
-	}
-	return(0);
 }

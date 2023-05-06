@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 15:26:43 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 15:52:40 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,9 @@ class Server
 		void nick_change(std::string, std::string);
 		void nick_first(std::string, std::string);
 		
-		int client_check(std::string nickname);
+		int client_nick_check(std::string nickname);
+		Client *client_ret(std::string nickname);
+		Client *client_ret(int fd);
 
 		int getNick_first() {return this->is_nick_first; };
 		void setNick_first(int is) {this->is_nick_first = is; };

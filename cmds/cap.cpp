@@ -33,4 +33,11 @@ void Server::cap(Server &server, std::string line)
 		i++;
 	}
 	my_vec.clear();
+	std::vector<Client>::iterator ite = this->clients_.end();
+	for(std::vector<Client>::iterator it = this->clients_.begin(); it != ite; it++)
+	{
+		std::cout<<"class_attr:"<<(*it).getFd()<<","<<(*it).getUserName()<<","<<(*it).getHostName()<<",";
+		std::cout<<(*it).getServername()<<","<<(*it).getReelName()<<","<<(*it).getNickName()<<","<<std::endl;
+	}
+	std::cout<<"cap sonu geldi"<<std::endl;
 }
