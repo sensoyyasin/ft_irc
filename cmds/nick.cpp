@@ -58,7 +58,11 @@ void Server::nick_first(std::string command_n, std::string buffer, int fd)
 	while (my_vec.size() > i)
 	{
 		if (my_vec[i] == "NICK")
+		{
 			this->temp_nick = my_vec[i + 1];
+			if(this->client_nick_check(temp_nick) == 1)
+				break;
+		}
 		else if (my_vec[i] == "USER")
 		{
 			if (!this->client_nick_check(this->temp_nick))
