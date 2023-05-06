@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 15:47:24 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 17:41:35 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	Server::loop()
 	std::string message;
 	while (1)
 	{
-		poll(pollfds.begin().base(), pollfds.size(), -1);
+		poll(pollfds.begin().base(), pollfds.size(), 1000);
 		for (size_t i = 0 ; i <  pollfds.size() ; i++)
 		{
 			if (pollfds[i].revents & POLLIN)
@@ -104,5 +104,4 @@ void	Server::newClient()
 		// 	++it;
 		// }
 	}
-	
 }

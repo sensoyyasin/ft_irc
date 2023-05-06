@@ -2,7 +2,7 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::cap(Server &server, std::string line)
+void Server::cap(Server &server, std::string line, int fd)
 {
 	std::vector<std::string> my_vec;
 	int i = 0;
@@ -23,10 +23,10 @@ void Server::cap(Server &server, std::string line)
 	while (my_vec.size() > i)
 	{
 		if (my_vec[i] == "NICK")
-			this->nick_first(my_vec[i], my_vec[i + 1]);
+			this->nick_first(my_vec[i], my_vec[i + 1], fd);
 		else if (my_vec[i] == "USER")
 		{
-			Client c(this->new_socket,my_vec[i+1],my_vec[i+2],my_vec[i+3],my_vec[i+4],this->temp_nick);
+			Client c(fd,my_vec[i+1],my_vec[i+2],my_vec[i+3],my_vec[i+4],this->temp_nick);
 			this->clients_.push_back(c);
 		}
 		std::cout << "vector:" << my_vec[i] << std::endl;

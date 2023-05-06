@@ -2,7 +2,7 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::join(Server &server, std::string buffer)
+void Server::join(Server &server, std::string buffer, int fd)
 {
 	std::vector<std::string> my_vec;
 	std::string command = "";

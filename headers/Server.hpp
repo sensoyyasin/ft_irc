@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 15:52:40 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 17:46:25 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ class Server
 		void	appointment(int argc, char **argv);
 		void	socketOperations();
 		void	socketOperations2(char **argv);
-		void	executable(std::string, std::string);
+		void	executable(std::string, std::string, int);
 
 		void	newClient();
 		void	executeCommand(int fd);
@@ -71,13 +71,13 @@ class Server
 		int	getmyport();
 		std::string	getmypassword();
 
-		void cap(Server &server, std::string);
-		void join(Server &server, std::string);
-		void quit(Server &server, std::string);
-		void bot(Server &server, std::string);
+		void cap(Server &server, std::string, int);
+		void join(Server &server, std::string, int);
+		void quit(Server &server, std::string, int);
+		void bot(Server &server, std::string, int);
 		
-		void nick_change(std::string, std::string);
-		void nick_first(std::string, std::string);
+		void nick_change(std::string, std::string, int);
+		void nick_first(std::string, std::string, int);
 		
 		int client_nick_check(std::string nickname);
 		Client *client_ret(std::string nickname);

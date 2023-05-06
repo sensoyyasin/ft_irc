@@ -2,7 +2,7 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::bot(Server &server, std::string buffer)
+void Server::bot(Server &server, std::string buffer, int fd)
 {
 	std::string command = "";
 	int i = 0;

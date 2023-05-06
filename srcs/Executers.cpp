@@ -11,7 +11,7 @@ void	Server::executeCommand(int fd)
 		memset(buff, 0, BUFFER_SIZE);
 		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
 		if(buff[0] > 31)
-			std::cout << "Received message: *" << buff << "*" << std::endl;
+			std::cout << "Received message: *" << buff << "* from fd: *" << fd << "*" << std::endl;
 		if (bytes_received < 0)
 		{
 			std::cerr << "Receive ended" << std::endl;
@@ -29,13 +29,13 @@ void	Server::executeCommand(int fd)
 				i++;
 			while (i < buffer.size())
 				args += buffer[i++];
-			executable(command, args);
+			executable(command, args, fd);
 			buffer.erase(0, i);
 		}
 	}
 }
 
-void	Server::executable(std::string command, std::string args)
+void	Server::executable(std::string command, std::string args, int fd)
 {
 	std::cout<<"commmand: *"<<command<<"*"<<std::endl;
 	std::cout<<"args: *"<<args<<"*"<<std::endl;
@@ -44,16 +44,16 @@ void	Server::executable(std::string command, std::string args)
 	if (command == "NICK")
 	{
 		if(this->is_nick_first == 1)
-			this->nick_first(command, args);
+			this->nick_first(command, args, fd);
 		else
-			this->nick_change(command, args);
+			this->nick_change(command, args, fd);
 	}
 	if (command == "JOIN")
-		join(*this, args);
+		join(*this, args, fd);
 	if (command == "QUIT")
-		quit(*this, args);
+		quit(*this, args, fd);
 	if (command == "CAP")
-		cap(*this, args);
+		cap(*this, args, fd);
 	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
 	// 	kick(*this, args);
 }
