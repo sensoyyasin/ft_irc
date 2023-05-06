@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/03 17:17:27 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 14:52:26 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ Server::Server(int argc, char **argv)
 	socketOperations();
 	socketOperations2(argv);
 
-	cap_ls[0] =  "ADD";
-	cap_ls[1] =  "NICK";
-	cap_ls[2] =  "JOIN";
-	cap_ls[3] =  "QUIT";
-	cap_ls[4] =  "CAP";
-	cap_ls[5] =  "KICK";
+	cap_ls[0] = "NICK";
+	cap_ls[1] = "JOIN";
+	cap_ls[2] = "QUIT";
+	cap_ls[3] = "CAP";
+	cap_ls[4] = "KICK";
+
+	this->is_nick_first = 0;
 }
 
 Server::~Server(){}
@@ -49,7 +50,7 @@ void	Server::loop()
 	while (1)
 	{
 		poll(pollfds.begin().base(), pollfds.size(), -1);
-		for (size_t i = 0 ; i < 3 ; i++)//for (size_t i = 0 ; i < pollfds.size() ; i++)
+		for (size_t i = 0 ; i <  pollfds.size() ; i++)
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
@@ -64,54 +65,6 @@ void	Server::loop()
 	}
 }
 
-void	Server::socketOperations()
-{
-	/* Create a socket */
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-	{
-		std::cerr << "Socket Failed" << std::endl;
-		exit(1);
-	}
-	int opt = 1;
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)) < 0)
-	{
-		std::cerr << "Setsockopt couldn't connect..." << std::endl;
-		exit(1);
-	}
-	if (setsockopt(server_fd, IPPROTO_TCP, TCP_NODELAY , &opt, sizeof(opt)) < 0)
-	{
-		std::cerr << "Setsockopt couldn't connect..." << std::endl;
-		exit(1);
-	}
-	if (fcntl(server_fd, F_SETFL, O_NONBLOCK) < 0)
-	{
-		std::cerr << "Setsockopt couldn't connect..." << std::endl;
-		exit(1);
-	}
-}
-
-void	Server::socketOperations2(char **argv)
-{
-	address.sin_family = AF_INET; //IPV4
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(atoi(argv[1]));
-
-	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-	{
-		std::cerr << "Error binding to port " << std::endl;
-		close(server_fd);
-		exit(1);
-	}
-
-	if (listen(server_fd, MAX_USR) < 0)
-	{
-		std::cerr << "listen failed" << std::endl;
-		close(server_fd);
-		exit(1);
-	}
-	pollfds.push_back((pollfd){server_fd, POLLIN, 0});
-}
-
 void	Server::newClient()
 {
 	buffer.clear();
@@ -121,103 +74,47 @@ void	Server::newClient()
 	if (this->new_socket < 0)
 	{
 		std::cerr << "Accept failed" << std::endl;
-		close(server_fd);
-		exit(1);
+		close(this->new_socket);
+		// close(server_fd);
+		// exit(1);
 	}
-	this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
-
-	Client c(this->new_socket, this->my_port);
-	this->clients_.push_back(c);
-	std::cout << "User connected: " << this->clients_.size() << "." << std::endl;
-	std::cout << "Fds size: " << this->pollfds.size() << "." << std::endl;
-
-	std::map<int, std::string>::iterator it;
-	it = cap_ls.begin();
-	std::string str;
-	while (it != cap_ls.end())
+	else
 	{
-		str.append('/' + it->second+"\n");
-		++it;
-	}
-	send(this->new_socket, str.c_str(), str.size(), 0);
-	// while (it != cap_ls.end())
-	// {
-	// 	std::string str = "/";
-	// 	str += it->second += "\r\n";
-	// 	send(this->new_socket, str.c_str(), str.size(), 0);
-	// 	++it;
-	// }
-}
+		this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
 
-void	Server::executeCommand(int fd)
-{
-	while (buffer.find("\r\n"))
-	{
-		buffer.clear();
-		char buff[BUFFER_SIZE];
-		memset(buff, 0, BUFFER_SIZE);
-		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
-		std::cout << "Received message: " << buff << std::endl;
-		if (bytes_received < 0)
+		// Client c(this->new_socket, this->my_port);
+		// this->clients_.push_back(c);
+		// std::cout << "User connected: " << this->clients_.size() << "." << std::endl;
+		// std::cout << "Fds size: " << this->pollfds.size() << "." << std::endl;
+	
+		std::map<int, std::string>::iterator it;
+		it = cap_ls.begin();
+		std::string str;
+		while (it != cap_ls.end())
 		{
-			std::cerr << "Receive ended" << std::endl;
-			return ;
+			str.append('/' + it->second+"\n");
+			++it;
 		}
-		buffer = std::string(buff);
-		int i = 0;
-		while (i < buffer.size())
-		{
-			std::string command = "";
-			std::string args = "";
-			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-				command += buffer[i++]; //first ->command
-			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
-				i++;
-			while (i < buffer.size())
-				args += buffer[i++];
-			executable(command, args);
-			buffer.erase(0, i);
-		}
+		send(this->new_socket, str.c_str(), str.size(), 0);
+		// while (it != cap_ls.end())
+		// {
+		// 	std::string str = "/";
+		// 	str += it->second += "\r\n";
+		// 	send(this->new_socket, str.c_str(), str.size(), 0);
+		// 	++it;
+		// }
 	}
+	
 }
 
-void	Server::executable(std::string command, std::string args)
+int Server::client_check(std::string nickname)
 {
-	if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
-		add(*this, args);
-	if (!strncmp(cap_ls[1].c_str(), command.c_str(), 4))
-		nick(*this, args);
-	if (!strncmp(cap_ls[2].c_str(), command.c_str(), 4))
-		join(*this, args);
-	if (!strncmp(cap_ls[3].c_str(), command.c_str(), 4))
-		quit(*this, args);
-	if (!strncmp(cap_ls[4].c_str(), command.c_str(), 3))
-		cap(*this, args);
-	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
-	// 	kick(*this, args);
-}
-
-
-void Server::cap(Server &server, std::string line)
-{
-	std::vector<std::string> my_vec;
-	int i = 0;
-	while (line.size() > i)
+	std::vector<Client>::iterator it = this->clients_.begin();
+	std::vector<Client>::iterator ite = this->clients_.end();
+	for (; it != ite; it++)
 	{
-		std::string command = "";
-		std::string args = "";
-		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-			command += buffer[i++]; //first ->command
-		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
-			i++;
-		my_vec.push_back(command);
+		if((*it).getNickName() == nickname)
+			return (1);
 	}
-	i = 0;
-	while (my_vec.size() > i)
-	{
-		if (my_vec[i] == "USER" || my_vec[i] == "NICK")
-			executable(my_vec[i], my_vec[i + 1]);
-		std::cout << my_vec[i] << std::endl; 
-		i++;
-	}
+	return(0);
 }

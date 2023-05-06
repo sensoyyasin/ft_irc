@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/03 17:03:17 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/06 15:26:43 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,14 @@ class Server
 {
 	private:
 		int my_port;
+		int is_nick_first;
 		std::string my_password;
 	public:
 		int					new_socket;
 		int					server_fd;
 		struct sockaddr_in	address;
 		std::string			buffer;
-		std::string			my_nick;
+		std::string			temp_nick;
 		int					user_count;
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
@@ -70,12 +71,18 @@ class Server
 		int	getmyport();
 		std::string	getmypassword();
 
-		void add(Server &server, std::string);
 		void cap(Server &server, std::string);
-		void nick(Server &server, std::string);
 		void join(Server &server, std::string);
 		void quit(Server &server, std::string);
 		void bot(Server &server, std::string);
+		
+		void nick_change(std::string, std::string);
+		void nick_first(std::string, std::string);
+		
+		int client_check(std::string nickname);
+
+		int getNick_first() {return this->is_nick_first; };
+		void setNick_first(int is) {this->is_nick_first = is; };
 };
 
 #endif
