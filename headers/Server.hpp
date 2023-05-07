@@ -62,7 +62,9 @@ class Server
 		void cap(Server &server, std::string, int);
 		void join(Server &server, std::string, int);
 		void quit(Server &server, std::string, int);
-		void bot(Server &server, std::string, int);
+		void ping(Server &server, std::string, int);
+		void pong(Server &server, std::string, int);
+		void privmsg(Server &server, std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);

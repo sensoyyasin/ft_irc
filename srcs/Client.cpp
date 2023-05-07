@@ -12,4 +12,4 @@ Client::Client(int fd, std::string username,std::string hostname, std::string se
 	this->setStatus(1);
 }
 
-Client::~Client() {}
+Client::~Client(){}

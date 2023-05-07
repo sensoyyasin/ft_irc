@@ -37,8 +37,8 @@ void	Server::executeCommand(int fd)
 
 void	Server::executable(std::string command, std::string args, int fd)
 {
-	std::cout<<"commmand: *"<<command<<"*"<<std::endl;
-	std::cout<<"args: *"<<args<<"*"<<std::endl;
+	std::cout<<"commmand: *" << command << "*"<<std::endl;
+	std::cout << "args: *" << args << "*" << std::endl;
 	// if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
 	// 	add(*this, args);
 	if (command == "NICK")
@@ -54,6 +54,8 @@ void	Server::executable(std::string command, std::string args, int fd)
 		quit(*this, args, fd);
 	if (command == "CAP")
 		cap(*this, args, fd);
+	if (command == "PRIVMSG")
+		privmsg(*this, args, fd);
 	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
 	// 	kick(*this, args);
 }

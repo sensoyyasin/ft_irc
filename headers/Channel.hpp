@@ -19,7 +19,7 @@ class Channel
 		//std::vector<Client *> channelClients;
 		//Client *getAdmin();
 
-		int getclientCount();
+		//int getchannelCount();
 		std::string getchannelName();
 };
 

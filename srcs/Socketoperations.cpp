@@ -16,7 +16,7 @@ void	Server::socketOperations()
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
 		exit(1);
 	}
-	if (setsockopt(server_fd, IPPROTO_TCP, TCP_NODELAY , &opt, sizeof(opt)) < 0)
+	if (setsockopt(server_fd, IPPROTO_TCP, TCP_NODELAY, &opt, sizeof(opt)) < 0)
 	{
 		std::cerr << "Setsockopt couldn't connect..." << std::endl;
 		exit(1);
