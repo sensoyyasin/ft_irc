@@ -13,7 +13,7 @@ Client software exists for various operating systems or software packages, as we
 <img width="944" alt="Mindmap_irc" src="https://user-images.githubusercontent.com/73845925/236672691-1639bb84-5b5a-4b97-8ac4-96f1bfe9e34a.png">
 
 
-![1280px-Ircnetz-Schema svg](https://user-images.githubusercontent.com/73845925/235754479-3b10f34f-0b5d-4e1b-af07-f27a7ae1ee26.png)
+![800px-Ircnetz-Schema svg](https://user-images.githubusercontent.com/73845925/235754479-3b10f34f-0b5d-4e1b-af07-f27a7ae1ee26.png)
 
 
 # What is Socket and What is Socket Programming?
