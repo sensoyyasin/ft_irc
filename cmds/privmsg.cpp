@@ -17,15 +17,17 @@ void Server::privmsg(Server& server, std::string buffer, int fd)
 		my_vec.push_back(command);
 	}
 	i = 0;
+
 	std::cout << my_vec[0] << std::endl;
 	std::cout << my_vec[1] << std::endl;
 	std::cout << my_vec[2] << std::endl;
 
-	// if (my_vec[1].find("PING") != 0)
-	// 	std::cerr << "There is no Ping command" << std::endl;
-	// else
-	// {
+	size_t found = my_vec[1].find("PING");
+	if (found == std::string::npos)
+		std::cerr << "There is no Ping command" << std::endl;
+	else
+	{
 		std::string b = ":" + this->temp_nick + "!localhost PONG " + my_vec[2] + "\r\n";
 		send(fd, b.c_str(), b.size(), 0);
-	//}
+	}
 }
