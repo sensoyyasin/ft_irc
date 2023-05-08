@@ -63,7 +63,6 @@ class Server
 		void join(Server &server, std::string, int);
 		void quit(Server &server, std::string, int);
 		void ping(Server &server, std::string, int);
-		void pong(Server &server, std::string, int);
 		void privmsg(Server &server, std::string, int);
 
 		void nick_change(std::string, std::string, int);

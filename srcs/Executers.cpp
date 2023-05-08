@@ -54,8 +54,10 @@ void	Server::executable(std::string command, std::string args, int fd)
 		quit(*this, args, fd);
 	if (command == "CAP")
 		cap(*this, args, fd);
-	if (command == "PRIVMSG")
+	if (command == "PRIVMSG") //channel specified message and /ping spesific_addr
 		privmsg(*this, args, fd);
+	if (command == "PING") //just /ping
+		ping(*this, args, fd);
 	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
 	// 	kick(*this, args);
 }

@@ -2,7 +2,7 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::privmsg(Server& server, std::string buffer, int fd)
+void Server::ping(Server &server, std::string buffer, int fd)
 {
 	std::vector<std::string> my_vec;
 	std::string command = "";
@@ -16,16 +16,11 @@ void Server::privmsg(Server& server, std::string buffer, int fd)
 			i++;
 		my_vec.push_back(command);
 	}
-	i = 0;
-	std::cout << my_vec[0] << std::endl;
-	std::cout << my_vec[1] << std::endl;
-	std::cout << my_vec[2] << std::endl;
-
-	// if (my_vec[1].find("PING") != 0)
-	// 	std::cerr << "There is no Ping command" << std::endl;
-	// else
-	// {
-		std::string b = ":" + this->temp_nick + "!localhost PONG " + my_vec[2] + "\r\n";
+	if (my_vec.size() != 1) // it's not just /ping , have to go privmsg.
+		privmsg(server, buffer, fd);
+	else
+	{
+		std::string b = ":" + this->temp_nick + "!localhost PONG " + my_vec[1] + "\r\n";
 		send(fd, b.c_str(), b.size(), 0);
-	//}
+	}
 }

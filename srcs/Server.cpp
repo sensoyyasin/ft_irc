@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/07 16:23:34 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/08 12:00:24 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ Server::Server(int argc, char **argv)
 	cap_ls[3] = "CAP";
 	cap_ls[4] = "KICK";
 	cap_ls[5] = "PRIVMSG";
+	cap_ls[6] = "PING";
 
 	this->is_nick_first = 0;
 }
@@ -91,7 +92,6 @@ void	Server::newClient()
 	else
 	{
 		this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
-
 		// Client c(this->new_socket, this->my_port);
 		// this->clients_.push_back(c);
 		// std::cout << "User connected: " << this->clients_.size() << "." << std::endl;

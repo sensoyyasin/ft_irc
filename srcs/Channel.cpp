@@ -11,3 +11,13 @@ std::string Channel::getchannelName()
 {
 	return (this->channelName);
 }
+
+std::string Channel::getchannelAdmin()
+{
+	return (this->channelAdmin);
+}
+
+// void Channel::doAdmin()
+// {
+
+// }

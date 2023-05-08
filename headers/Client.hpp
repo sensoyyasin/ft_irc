@@ -20,8 +20,6 @@ class Client
 		Client(int fd, std::string username,std::string hostname, std::string servername, std::string realname, std::string nickname);
 		~Client();
 
-		//std::vector<Channel *> channels;
-
 		// Getter
 		int getFd() const { return (this->fd); }
 		int getPort() const { return (this->port); }
