@@ -6,7 +6,7 @@
 /*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/08 12:00:24 by ysensoy          ###   ########.fr       */
+/*   Updated: 2023/05/08 13:58:45 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ Server::Server(int argc, char **argv)
 	cap_ls[2] = "QUIT";
 	cap_ls[3] = "CAP";
 	cap_ls[4] = "KICK";
-	cap_ls[5] = "PRIVMSG";
 	cap_ls[6] = "PING";
 
 	this->is_nick_first = 0;
