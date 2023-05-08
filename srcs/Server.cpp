@@ -6,7 +6,7 @@
 /*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 17:41:35 by mtemel           ###   ########.fr       */
+/*   Updated: 2023/05/08 13:01:51 by mtemel           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,21 @@ Server::Server(int argc, char **argv)
 	cap_ls[2] = "QUIT";
 	cap_ls[3] = "CAP";
 	cap_ls[4] = "KICK";
+	cap_ls[5] = "PRIVMSG";
 
 	this->is_nick_first = 0;
 }
 
-Server::~Server(){}
+Server::~Server()
+{
+	std::vector<Client>::iterator it = clients_.begin();
+	while (it != clients_.end())
+	{
+		delete(&(*it));
+		++it;
+	}
+	clients_.clear();
+}
 
 void  Server::appointment(int argc, char **argv)
 {
@@ -96,12 +106,5 @@ void	Server::newClient()
 			++it;
 		}
 		send(this->new_socket, str.c_str(), str.size(), 0);
-		// while (it != cap_ls.end())
-		// {
-		// 	std::string str = "/";
-		// 	str += it->second += "\r\n";
-		// 	send(this->new_socket, str.c_str(), str.size(), 0);
-		// 	++it;
-		// }
 	}
 }

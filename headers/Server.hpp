@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/23 22:16:42 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/06 17:46:25 by mtemel           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
@@ -71,10 +59,12 @@ class Server
 		int	getmyport();
 		std::string	getmypassword();
 
-		void cap(Server &server, std::string, int);
-		void join(Server &server, std::string, int);
-		void quit(Server &server, std::string, int);
-		void bot(Server &server, std::string, int);
+		void cap(std::string, int);
+		void join(std::string, int);
+		void quit(std::string, int);
+		void ping(std::string, int);
+		void pong(std::string, int);
+		void privmsg(std::string, int);
 		
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);
@@ -88,3 +78,5 @@ class Server
 };
 
 #endif
+
+// void bot(Server &server, std::string, int);

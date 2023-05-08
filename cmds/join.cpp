@@ -2,11 +2,11 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::join(Server &server, std::string buffer, int fd)
+void Server::join(std::string buffer, int fd)
 {
 	std::vector<std::string> my_vec;
 	std::string command = "";
-	int i = 0;
+	unsigned int i = 0;
 	while (buffer.size() > i)
 	{
 		std::string command = "";
@@ -25,14 +25,15 @@ void Server::join(Server &server, std::string buffer, int fd)
 			continue;
 		}
 		my_vec[i] = my_vec[i].substr(1, my_vec[i].size() - 1);
-		int j = -1;
-		while (++j < this->channels_.size())
+		unsigned int j = 0;
+		while (j < this->channels_.size())
 		{
 			if(this->channels_[j].getchannelName() == my_vec[i])
 			{
 				std::cerr << "\033[1;91mThis channel is already exist:\033[0m" << my_vec[i] << std::endl;
 				break;
 			}
+			j++;
 		}
 		if (j == this->channels_.size())
 		{
@@ -42,6 +43,7 @@ void Server::join(Server &server, std::string buffer, int fd)
 		std::string b = ":" + this->temp_nick + "!localhost JOIN " + my_vec[i] + "\r\n";
 		send(this->new_socket, b.c_str(), b.size(), 0);
 		b.clear();
+		(void)fd;
 	}
 	std::cerr << "\033[1;96mNumber of channel:\033[0m" << this->channels_.size() << std::endl;
 	buffer.clear();

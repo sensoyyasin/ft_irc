@@ -2,10 +2,10 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::cap(Server &server, std::string line, int fd)
+void Server::cap(std::string line, int fd)
 {
 	std::vector<std::string> my_vec;
-	int i = 0;
+	unsigned int i = 0;
 	while (line.size() > i)
 	{
 		std::string command = "";

@@ -14,11 +14,11 @@ void	Server::executeCommand(int fd)
 			std::cout << "Received message: *" << buff << "* from fd: *" << fd << "*" << std::endl;
 		if (bytes_received < 0)
 		{
-			std::cerr << "Receive ended" << std::endl;
+			std::cerr << "\033[1;34mReceive ended\033[0m" << std::endl;
 			return ;
 		}
 		buffer = std::string(buff);
-		int i = 0;
+		unsigned int i = 0;
 		while (i < buffer.size())
 		{
 			std::string command = "";
@@ -49,11 +49,13 @@ void	Server::executable(std::string command, std::string args, int fd)
 			this->nick_change(command, args, fd);
 	}
 	if (command == "JOIN")
-		join(*this, args, fd);
+		join(args, fd);
 	if (command == "QUIT")
-		quit(*this, args, fd);
+		quit(args, fd);
 	if (command == "CAP")
-		cap(*this, args, fd);
+		cap(args, fd);
+	if (command == "PRIVMSG")
+		privmsg(args, fd);
 	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
 	// 	kick(*this, args);
 }
