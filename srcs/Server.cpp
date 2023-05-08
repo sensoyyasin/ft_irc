@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+=======
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mtemel <mtemel@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
+/*   Updated: 2023/05/08 13:01:51 by mtemel           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+>>>>>>> 28184583832779898723191b451770961cc0f9db
 #include "../headers/Channel.hpp"
 #include "../headers/Client.hpp"
 #include "../headers/Server.hpp"
@@ -10,6 +25,7 @@ Server::Server(int argc, char **argv)
 	socketOperations();
 	socketOperations2(argv);
 
+<<<<<<< HEAD
 	cap_ls[0] =  "ADD";
 	cap_ls[1] =  "NICK";
 	cap_ls[2] =  "JOIN";
@@ -17,9 +33,28 @@ Server::Server(int argc, char **argv)
 	cap_ls[4] =  "CAP";
 	cap_ls[5] =  "KICK";
 	cap_ls[6] =  "BOT";
+=======
+	cap_ls[0] = "NICK";
+	cap_ls[1] = "JOIN";
+	cap_ls[2] = "QUIT";
+	cap_ls[3] = "CAP";
+	cap_ls[4] = "KICK";
+	cap_ls[5] = "PRIVMSG";
+
+	this->is_nick_first = 0;
+>>>>>>> 28184583832779898723191b451770961cc0f9db
 }
 
-Server::~Server(){}
+Server::~Server()
+{
+	std::vector<Client>::iterator it = clients_.begin();
+	while (it != clients_.end())
+	{
+		delete(&(*it));
+		++it;
+	}
+	clients_.clear();
+}
 
 void  Server::appointment(int argc, char **argv)
 {
@@ -37,8 +72,8 @@ void	Server::loop()
 	std::string message;
 	while (1)
 	{
-		poll(pollfds.begin().base(), pollfds.size(), -1);
-		for (size_t i = 0 ; i < pollfds.size() ; i++)
+		poll(pollfds.begin().base(), pollfds.size(), 1000);
+		for (size_t i = 0 ; i <  pollfds.size() ; i++)
 		{
 			if (pollfds[i].revents & POLLIN)
 			{
@@ -53,52 +88,16 @@ void	Server::loop()
 	}
 }
 
-void	Server::socketOperations()
-{
-	/* Create a socket */
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
-	{
-		std::cerr << "Socket Failed" << std::endl;
-		exit(1);
-	}
-	int opt = 1;
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt)) < 0)
-	{
-		std::cerr << "Setsockopt couldn't connect..." << std::endl;
-		exit(1);
-	}
-}
-
-void	Server::socketOperations2(char **argv)
-{
-	address.sin_family = AF_INET; //IPV4
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(atoi(argv[1]));
-
-	if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0)
-	{
-		std::cerr << "Error binding to port " << std::endl;
-		close(server_fd);
-		exit(1);
-	}
-
-	if (listen(server_fd, MAX_USR) < 0)
-	{
-		std::cerr << "listen failed" << std::endl;
-		close(server_fd);
-		exit(1);
-	}
-	pollfds.push_back((pollfd){server_fd, POLLIN, 0});
-}
-
 void	Server::newClient()
 {
 	buffer.clear();
 	int	addr_len = sizeof(address);
 	this->new_socket = accept(server_fd, (struct sockaddr*)&address, (socklen_t *)&addr_len);
+	std::cout << "New socket: " << this->new_socket << std::endl;
 	if (this->new_socket < 0)
 	{
 		std::cerr << "Accept failed" << std::endl;
+<<<<<<< HEAD
 		close(server_fd);
 		exit(1);
 	}
@@ -115,22 +114,30 @@ void	Server::newClient()
 		str += it->second += "\r\n";
 		send(this->new_socket, str.c_str(), str.size(), 0);
 		++it;
+=======
+		close(this->new_socket);
+		// close(server_fd);
+		// exit(1);
+>>>>>>> 28184583832779898723191b451770961cc0f9db
 	}
-}
-
-void	Server::executeCommand(int fd)
-{
-	while (buffer.find("\r\n"))
+	else
 	{
-		buffer.clear();
-		char buff[BUFFER_SIZE];
-		memset(buff, 0, BUFFER_SIZE);
-		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
-		if (bytes_received < 0)
+		this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
+
+		// Client c(this->new_socket, this->my_port);
+		// this->clients_.push_back(c);
+		// std::cout << "User connected: " << this->clients_.size() << "." << std::endl;
+		// std::cout << "Fds size: " << this->pollfds.size() << "." << std::endl;
+	
+		std::map<int, std::string>::iterator it;
+		it = cap_ls.begin();
+		std::string str;
+		while (it != cap_ls.end())
 		{
-			std::cerr << "Receive failed" << std::endl;
-			return ;
+			str.append('/' + it->second+"\n");
+			++it;
 		}
+<<<<<<< HEAD
 		buffer = std::string(buff);
 		int i = 0;
 		while (i < buffer.size())
@@ -189,3 +196,8 @@ void Server::cap(Server &server, std::string line)
 		i++;
 	}
 }
+=======
+		send(this->new_socket, str.c_str(), str.size(), 0);
+	}
+}
+>>>>>>> 28184583832779898723191b451770961cc0f9db
