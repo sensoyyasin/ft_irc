@@ -20,11 +20,15 @@ void Server::privmsg(Server& server, std::string buffer, int fd)
 
 	std::cout << my_vec[0] << std::endl;
 	std::cout << my_vec[1] << std::endl;
-	std::cout << my_vec[2] << std::endl;
 
 	size_t found = my_vec[1].find("PING");
 	if (found == std::string::npos)
+	{
 		std::cerr << "There is no Ping command" << std::endl;
+
+		std::string b = ":" + this->temp_nick + "!localhost PRIVMSG " + my_vec[1] + "\r\n";
+		send(fd, b.c_str(), b.size(), 0);
+	}
 	else
 	{
 		std::string b = ":" + this->temp_nick + "!localhost PONG " + my_vec[2] + "\r\n";

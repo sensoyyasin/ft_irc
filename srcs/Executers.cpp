@@ -37,10 +37,10 @@ void	Server::executeCommand(int fd)
 
 void	Server::executable(std::string command, std::string args, int fd)
 {
-	std::cout<<"commmand: *" << command << "*"<<std::endl;
+	std::cout << "commmand: *" << command << "*" << std::endl;
 	std::cout << "args: *" << args << "*" << std::endl;
-	// if (!strncmp(cap_ls[0].c_str(), command.c_str(), 3))
-	// 	add(*this, args);
+
+	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
 	if (command == "NICK")
 	{
 		if(this->is_nick_first == 1)
@@ -58,6 +58,10 @@ void	Server::executable(std::string command, std::string args, int fd)
 		privmsg(*this, args, fd);
 	if (command == "PING") //just /ping
 		ping(*this, args, fd);
+	if (command == "MODE")
+		mode(*this, args, fd);
+	if (command == "PASS")
+		pass(*this, args, fd);
 	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
 	// 	kick(*this, args);
 }

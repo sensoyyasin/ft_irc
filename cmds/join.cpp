@@ -39,11 +39,6 @@ void Server::join(Server &server, std::string buffer, int fd)
 		{
 			Channel c(my_vec[i]);
 			this->channels_.push_back(c);
-			// if there is just one person you have to admin this channel
-			// if (this->channels_.size() == 1)
-			// {
-			// 	c.doAdmin();
-			// }
 		}
 		std::string b = ":" + this->temp_nick + "!localhost JOIN " + my_vec[i] + "\r\n";
 		send(this->new_socket, b.c_str(), b.size(), 0);

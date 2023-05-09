@@ -6,6 +6,8 @@
 
 class Client;
 
+class Server;
+
 class Channel
 {
 	private:
@@ -18,14 +20,15 @@ class Channel
 	public:
 		Channel(std::string channelName);
 		~Channel();
-		//Client channelAdmin;
-		//std::vector<Client> channelClients;
-		//Client getAdmin();
 
-		//int getchannelCount();
-		void doAdmin();
 		std::string getchannelAdmin();
 		std::string getchannelName();
+
+		void addUser(Server &server,Client c);
+
+		// std::vector<Client> getUsers();
+
+		// bool findUser(std::string nickName);
 };
 
 #endif
