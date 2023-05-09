@@ -8,7 +8,7 @@ void	Server::executeCommand(int fd)
 	{
 		buffer.clear();
 		char buff[BUFFER_SIZE];
-		memset(buff, 0, BUFFER_SIZE);
+		memset(buff, 0, BUFFER_SIZE); /* Cleaning up memory */
 		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
 		if(buff[0] > 31)
 			std::cout << "Received message: *" << buff << "* from fd: *" << fd << "*" << std::endl;
@@ -62,6 +62,6 @@ void	Server::executable(std::string command, std::string args, int fd)
 		mode(*this, args, fd);
 	if (command == "PASS")
 		pass(*this, args, fd);
-	// if (!strncmp(cap_ls[5].c_str(), command.c_str(), 4))
-	// 	kick(*this, args);
+	if (command == "WHO")
+		who(*this, args, fd);
 }

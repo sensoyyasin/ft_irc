@@ -6,7 +6,7 @@
 /*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/09 10:51:40 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/09 12:43:57 by yasinsensoy      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ Server::Server(int argc, char **argv)
 	cap_ls[6] = "PING";
 	cap_ls[7] = "MODE";
 	cap_ls[8] = "PASS";
+	cap_ls[9] = "WHO";
 
 	this->is_nick_first = 0;
 }
