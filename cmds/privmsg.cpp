@@ -26,7 +26,7 @@ void Server::privmsg(Server& server, std::string buffer, int fd)
 	{
 		std::cerr << "There is no Ping command" << std::endl;
 
-		std::string b = ":" + this->temp_nick + "!localhost PRIVMSG " + my_vec[1] + "\r\n";
+		std::string b = ":" + this->client_ret(fd)->getPrefixName() + " PRIVMSG " + my_vec[1] + "\r\n";
 		send(fd, b.c_str(), b.size(), 0);
 	}
 	else

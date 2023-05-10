@@ -36,7 +36,7 @@ void Server::mode(Server &server, std::string buffer, int fd)
 	std::string mode_change = my_vec[1].substr(1); // +parse
 
 	// /mode #2 +o ysensoy -> eger 2 kanalında değilsek direkt 2 kanalına ysensoy'u ekle ve admin yap.
-	std::string message_mode = ":" + this->temp_nick + "!localhost MODE " + my_vec[0] + " " + my_vec[1] + my_vec[2] + "\r\n";
+	std::string message_mode = ":" + this->client_ret(fd)->getPrefixName() + " MODE " + my_vec[0] + " " + my_vec[1] + my_vec[2] + "\r\n";
 	send(fd, message_mode.c_str(), message_mode.size(), 0);
 	message_mode.clear();
 }

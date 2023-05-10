@@ -33,6 +33,11 @@ void Server::cap(Server &server, std::string line, int fd)
 			Client c(fd,my_vec[i+1],my_vec[i+2],my_vec[i+3],my_vec[i+4],this->temp_nick);
 			this->clients_.push_back(c);
 		}
+		else if (my_vec[i] == "PASS")
+		{
+			//std::cout << "What is the password : " << my_vec[i + 1] << std::endl;
+			this->my_password = my_vec[i + 1];
+		}
 		std::cout << "vector:" << my_vec[i] << std::endl;
 		i++;
 	}
