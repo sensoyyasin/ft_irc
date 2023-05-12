@@ -18,7 +18,7 @@ void	Server::executeCommand(int fd)
 			return ;
 		}
 		buffer = std::string(buff);
-		int i = 0;
+		unsigned int i = 0;
 		while (i < buffer.size())
 		{
 			std::string command = "";
@@ -49,19 +49,19 @@ void	Server::executable(std::string command, std::string args, int fd)
 			this->nick_change(command, args, fd);
 	}
 	if (command == "JOIN")
-		join(*this, args, fd);
+		join(args, fd);
 	if (command == "QUIT")
-		quit(*this, args, fd);
+		quit(args, fd);
 	if (command == "CAP")
-		cap(*this, args, fd);
+		cap(args, fd);
 	if (command == "PRIVMSG") //channel specified message and /ping spesific_addr
-		privmsg(*this, args, fd);
+		privmsg(args, fd);
 	if (command == "PING") //just /ping
-		ping(*this, args, fd);
-	if (command == "MODE")
-		mode(*this, args, fd);
+		ping(args, fd);
+	// if (command == "MODE")
+	// 	mode(args, fd);
 	if (command == "PASS")
-		pass(*this, args, fd);
+		pass(args, fd);
 	if (command == "WHO")
-		who(*this, args, fd);
+		who(args, fd);
 }

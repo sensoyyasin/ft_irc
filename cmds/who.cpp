@@ -2,11 +2,13 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::who(Server &server, std::string str, int fd)
+void Server::who(std::string str, int fd)
 {
+	(void)fd;
+	(void)str;
 	std::vector<std::string> my_vec;
 	std::string command = "";
-	int i = 0;
+	unsigned int i = 0;
 	while (buffer.size() > i)
 	{
 		std::string command = "";
@@ -17,13 +19,13 @@ void Server::who(Server &server, std::string str, int fd)
 		my_vec.push_back(command);
 	}
 	i = 0;
-	while(server.user_count > i)
-	{
-		/* aynı kanaldaysa veya farklı kanaldaysa da tüm kullanıcıları listeliyor düzeltilecek. 
-		 Sadece aynı kanaldaki kullanıcıları göstermeli. */
-		std::cout << "You are : " << this->clients_[i].getNickName() << std::endl;
-		i++;
-	}
+	// while(this->user_count > i)
+	// {
+	// 	/* aynı kanaldaysa veya farklı kanaldaysa da tüm kullanıcıları listeliyor düzeltilecek.
+	// 	 Sadece aynı kanaldaki kullanıcıları göstermeli. */
+	// 	std::cout << "You are : " << this->clients_[i].getNickName() << std::endl;
+	// 	i++;
+	// }
 	// std::vector<Channel>::iterator it = channels_.begin(); // Loop through all channels
 	// if (it != channels_.end()) // finding...
 	// {

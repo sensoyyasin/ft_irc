@@ -2,8 +2,8 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::mode(Server &server, std::string buffer, int fd)
-{
+// void Server::mode(std::string buffer, int fd)
+// {
 	//do admin.
 	//join(*this, buffer, fd);
 	/*
@@ -35,4 +35,4 @@ void Server::mode(Server &server, std::string buffer, int fd)
 	send(fd, message_mode.c_str(), message_mode.size(), 0);
 	message_mode.clear();
 	*/
-}
+// }

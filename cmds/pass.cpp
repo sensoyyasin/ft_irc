@@ -2,12 +2,13 @@
 #include "../headers/Client.hpp"
 #include "../headers/Channel.hpp"
 
-void Server::pass(Server &server, std::string buffer, int fd)
+void Server::pass(std::string buffer, int fd)
 {
 	// There is no need to send message to server from hexchat.
+	(void)fd;
 	std::vector<std::string> my_vec;
 	std::string command = "";
-	int i = 0;
+	unsigned int i = 0;
 	while (buffer.size() > i)
 	{
 		std::string command = "";

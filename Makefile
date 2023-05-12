@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+         #
+#    By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/23 22:16:26 by yasinsensoy       #+#    #+#              #
-#    Updated: 2023/05/02 16:23:28 by ysensoy          ###   ########.fr        #
+#    Updated: 2023/05/12 22:48:53 by yasinsensoy      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
-CC = c++
+CC = c++ -Wall -Wextra -Werror
 SRCS = $(wildcard headers/*.cpp srcs/*.cpp cmds/*.cpp)
 OBJ = $(SRCS:.cpp = .o)
 

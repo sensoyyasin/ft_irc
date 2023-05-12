@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/12 11:55:45 by ysensoy          ###   ########.fr       */
+/*   Updated: 2023/05/12 22:49:37 by yasinsensoy      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Server::Server(int argc, char **argv)
 	cap_ls[3] = "CAP";
 	cap_ls[4] = "KICK";
 	cap_ls[6] = "PING";
-	cap_ls[7] = "MODE";
+	//cap_ls[7] = "MODE";
 	cap_ls[8] = "PASS";
 	cap_ls[9] = "WHO";
 

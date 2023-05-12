@@ -38,7 +38,7 @@ class Server
 		std::string			buffer;
 		std::string			temp_nick;
 		int					user_count;
-	
+
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
 		std::vector<Client> clients_;
@@ -60,14 +60,14 @@ class Server
 		int	getmyport();
 		std::string	getmypassword();
 
-		void cap(Server &server, std::string, int);
-		void join(Server &server, std::string, int);
-		void quit(Server &server, std::string, int);
-		void ping(Server &server, std::string, int);
-		void privmsg(Server &server, std::string, int);
-		void mode(Server &server, std::string, int);
-		void pass(Server &server, std::string, int);
-		void who(Server &server, std::string, int);
+		void cap(std::string, int);
+		void join(std::string, int);
+		void quit(std::string, int);
+		void ping(std::string, int);
+		void privmsg(std::string, int);
+		void mode(std::string, int);
+		void pass(std::string, int);
+		void who(std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);
