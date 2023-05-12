@@ -65,9 +65,7 @@ class Server
 		void quit(std::string, int);
 		void ping(std::string, int);
 		void privmsg(std::string, int);
-		void mode(std::string, int);
 		void pass(std::string, int);
-		void who(std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);
