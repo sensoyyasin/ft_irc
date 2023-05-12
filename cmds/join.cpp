@@ -42,6 +42,7 @@ void Server::join(std::string buffer, int fd)
 			Channel c(my_vec[i]);
 
 			c.setchannelAdminFd(this->client_ret(fd)->getFd());
+			std::cout << "\033[1;92mAdmin_fd : \033[0m" << c.getchannelAdminFd() << std::endl;
 			c._clientsFd.push_back(fd);
 			this->channels_.push_back(c);
 
