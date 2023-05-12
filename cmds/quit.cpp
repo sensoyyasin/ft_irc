@@ -24,9 +24,7 @@ void Server::quit(std::string str, int fd)
 		close(fd);
 		std::cout << "Şu anki kullanici sayisi  :" << this->clients_.size() << std::endl;
 		if (this->clients_.size() == 0)
-		{
 			std::cout << "Hiç kullanici yok kanal kapatılacak. " << this->clients_.size() << std::endl;
-		}
 	}
 	(void)str;
 }
