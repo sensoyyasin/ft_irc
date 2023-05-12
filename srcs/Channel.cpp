@@ -12,9 +12,9 @@ std::string Channel::getchannelName()
 	return (this->channelName);
 }
 
-std::string Channel::getchannelAdmin()
+int Channel::getchannelAdminFd()
 {
-	return (this->channelAdmin);
+	return (this->channelAdminFd);
 }
 
 // void Channel::addUser(Server& server, Client c)

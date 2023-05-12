@@ -13,7 +13,7 @@ class Channel
 	private:
 		int clientCount;
 		std::string channelName;
-		std::string channelAdmin;
+		int channelAdminFd;
 		//std::string	k;
 		//int l;
 		//bool n;
@@ -21,8 +21,12 @@ class Channel
 		Channel(std::string channelName);
 		~Channel();
 
-		std::string getchannelAdmin();
+		std::vector<int> _clientsFd;
+
+		int getchannelAdminFd();
 		std::string getchannelName();
+
+		void setchannelAdminFd(int adminFd) {this->channelAdminFd = adminFd;}
 
 		void addUser(Server &server,Client c);
 

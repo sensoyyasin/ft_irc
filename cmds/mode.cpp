@@ -6,6 +6,7 @@ void Server::mode(Server &server, std::string buffer, int fd)
 {
 	//do admin.
 	//join(*this, buffer, fd);
+	/*
 	std::vector<std::string> my_vec;
 	std::string command = "";
 	int i = 0;
@@ -21,15 +22,9 @@ void Server::mode(Server &server, std::string buffer, int fd)
 	//std::cout << my_vec[0] << std::endl; #2
 	//std::cout << my_vec[1] << std::endl; +o
 	//std::cout << my_vec[2] << std::endl; ysensoy
-
-	if (my_vec.size() < 3)
-	{
-		std::cerr << "\033[1;91mError: Invalid number of arguments for MODE command.\033[0m" << std::endl;
-		return;
-	}
 	if (my_vec[0][0] != '#' || my_vec[1][0] != '+')
 	{
-		std::cerr << "\033[1;91mError: Invalid args.\033[0m" << std::endl;
+		//std::cerr << "\033[1;91mError: Invalid args.\033[0m" << std::endl;
 		return;
 	}
 	std::string channel_name = my_vec[0].substr(1); // #parse
@@ -39,4 +34,5 @@ void Server::mode(Server &server, std::string buffer, int fd)
 	std::string message_mode = ":" + this->client_ret(fd)->getPrefixName() + " MODE " + my_vec[0] + " " + my_vec[1] + my_vec[2] + "\r\n";
 	send(fd, message_mode.c_str(), message_mode.size(), 0);
 	message_mode.clear();
+	*/
 }

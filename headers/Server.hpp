@@ -38,6 +38,7 @@ class Server
 		std::string			buffer;
 		std::string			temp_nick;
 		int					user_count;
+	
 		std::map<int, std::string> cap_ls;
 		std::vector<pollfd>	pollfds;
 		std::vector<Client> clients_;

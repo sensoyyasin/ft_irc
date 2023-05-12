@@ -16,10 +16,13 @@ void Server::who(Server &server, std::string str, int fd)
 			i++;
 		my_vec.push_back(command);
 	}
-	if (my_vec.size() < 2)
+	i = 0;
+	while(server.user_count > i)
 	{
-		std::cerr << "\033[1;94mError: Not enough arg: [WHO]\033[0m" << std::endl;
-		return;
+		/* aynı kanaldaysa veya farklı kanaldaysa da tüm kullanıcıları listeliyor düzeltilecek. 
+		 Sadece aynı kanaldaki kullanıcıları göstermeli. */
+		std::cout << "You are : " << this->clients_[i].getNickName() << std::endl;
+		i++;
 	}
 	// std::vector<Channel>::iterator it = channels_.begin(); // Loop through all channels
 	// if (it != channels_.end()) // finding...

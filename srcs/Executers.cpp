@@ -43,7 +43,7 @@ void	Server::executable(std::string command, std::string args, int fd)
 	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
 	if (command == "NICK")
 	{
-		if(this->is_nick_first == 1)
+		if (this->is_nick_first == 1)
 			this->nick_first(command, args, fd);
 		else
 			this->nick_change(command, args, fd);

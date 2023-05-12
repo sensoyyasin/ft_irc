@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yasinsensoy <yasinsensoy@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ysensoy <ysensoy@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 22:16:32 by yasinsensoy       #+#    #+#             */
-/*   Updated: 2023/05/09 12:43:57 by yasinsensoy      ###   ########.fr       */
+/*   Updated: 2023/05/12 11:55:45 by ysensoy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	Server::newClient()
 	else
 	{
 		this->pollfds.push_back((pollfd){this->new_socket, POLLIN, 0});
-
+		this->user_count++;
 		std::map<int, std::string>::iterator it;
 		it = cap_ls.begin();
 		std::string str;
