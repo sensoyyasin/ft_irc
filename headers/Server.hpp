@@ -44,6 +44,7 @@ class Server
 		std::vector<Client> clients_;
 		std::vector<Channel> channels_;
 
+
 		Server(int, char **);
 		~Server();
 
@@ -76,6 +77,7 @@ class Server
 
 		int getNick_first() {return this->is_nick_first; };
 		void setNick_first(int is) {this->is_nick_first = is; };
+		int flag;
 };
 
 #endif

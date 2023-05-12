@@ -61,7 +61,7 @@ void Server::join(std::string buffer, int fd)
 			std::string b = ":" + this->client_ret(fd)->getPrefixName() + " JOIN " + my_vec[i] + "\r\n";
 			send(fd, b.c_str(), b.size(), 0);
 		}
-
+		this->flag = 1; // two /server localhost 4242.
 		unsigned int j = 0;
 		int	fdTemp;
 		while (j < channels_.size() && channels_[j].getchannelName() == my_vec[0])

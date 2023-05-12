@@ -4,6 +4,11 @@
 
 void Server::quit(std::string str, int fd)
 {
+	if (this->flag == 0)
+	{
+		std::cout <<"\033[1;91m" << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m ";
+		exit(1);
+	}
 	if (this->client_ret(fd))
 	{
 		std::cout <<"\033[1;91m" << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m ";
@@ -35,7 +40,7 @@ void Server::quit(std::string str, int fd)
 			else
 			{
 				// No other clients left in the channel
-				this->channels_[index].setchannelAdminFd(-1);
+				this->channels_[index].setchannelAdminFd(42);
 			}
 		}
 		//we have to check
