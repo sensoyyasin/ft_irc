@@ -69,6 +69,7 @@ class Server
 		void pass(std::string, int);
 		void kick(std::string, int);
 		void mode(std::string, int);
+		void kill(std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);

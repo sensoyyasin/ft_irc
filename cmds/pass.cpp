@@ -7,7 +7,6 @@ void Server::pass(std::string buffer, int fd)
 	// There is no need to send message to server from hexchat.
 	(void)fd;
 	std::vector<std::string> my_vec;
-	std::string command = "";
 	unsigned int i = 0;
 	while (buffer.size() > i)
 	{
