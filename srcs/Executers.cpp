@@ -66,4 +66,6 @@ void	Server::executable(std::string command, std::string args, int fd)
 		mode(args, fd);
 	if (command == "KILL")
 		kill(args, fd);
+	if (command == "BOT")
+		bot(args, fd);
 }

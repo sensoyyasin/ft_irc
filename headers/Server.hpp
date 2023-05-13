@@ -17,6 +17,7 @@
 #include <netinet/tcp.h>
 #include "Client.hpp"
 #include "Channel.hpp"
+#include <cstdlib>
 
 #define PORT 8080
 #define BUFFER_SIZE 1024
@@ -70,6 +71,7 @@ class Server
 		void kick(std::string, int);
 		void mode(std::string, int);
 		void kill(std::string, int);
+		void bot(std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);
