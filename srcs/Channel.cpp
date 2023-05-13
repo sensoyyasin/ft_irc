@@ -3,6 +3,9 @@
 Channel::Channel(std::string channelName) : clientCount(1)
 {
 	this->channelName = channelName;
+	this->k = false;
+	this->l = false;
+	this->n = false;
 }
 
 Channel::~Channel() {}

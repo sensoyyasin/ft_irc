@@ -18,6 +18,9 @@ void Server::pass(std::string buffer, int fd)
 			i++;
 		my_vec.push_back(command);
 	}
+	std::cout << "ne geliyo" << my_vec[0] << std::endl;
+	std::cout << my_vec[1] << std::endl;
+	std::cout << my_vec[2] << std::endl;
 	if (my_vec.empty())
 	{
 		std::cerr << "\033[1;95mError: Missing password!\033[0m" << std::endl;

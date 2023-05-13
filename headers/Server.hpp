@@ -67,6 +67,8 @@ class Server
 		void ping(std::string, int);
 		void privmsg(std::string, int);
 		void pass(std::string, int);
+		void kick(std::string, int);
+		void mode(std::string, int);
 
 		void nick_change(std::string, std::string, int);
 		void nick_first(std::string, std::string, int);
@@ -78,6 +80,7 @@ class Server
 		int getNick_first() {return this->is_nick_first; };
 		void setNick_first(int is) {this->is_nick_first = is; };
 		int flag;
+		unsigned int channel_ok;
 };
 
 #endif
