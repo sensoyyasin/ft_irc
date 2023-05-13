@@ -60,7 +60,6 @@ void Server::kick(std::string buffer, int fd)
 			{
 				if (this->channels_[index]._clientsFd[m] == kick_fd)
 				{
-					std::cout << "Ne:" << this->channels_[index]._clientsFd[m] << std::endl;
 					if (m == 0)
 					{
 						std::cerr << "Admin kendini atamaz" << std::endl;
