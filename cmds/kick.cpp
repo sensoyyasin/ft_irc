@@ -19,8 +19,7 @@ void Server::kick(std::string buffer, int fd)
 
 	this->channel_ok = 0;
 
-	// Kanal ve kullanıcı kontrolü yapılacak
-	if (my_vec.size() < 3) {
+	if (my_vec.size() < 3){
 		std::cerr << "\033[1;91mHatalı komut formatı. Örnek kullanım: /kick #kanal kullanıcı_adı\033[0m" << std::endl;
 		return;
 	}
@@ -37,8 +36,7 @@ void Server::kick(std::string buffer, int fd)
 		index++;
 	}
 
-	if (!this->channel_ok)
-	{
+	if (!this->channel_ok){
 		std::cerr << "\033[1;91mYou are not an admin or you are trying to kick someone from a different channel.\033[0m" << std::endl;
 		return;
 	}
@@ -56,15 +54,13 @@ void Server::kick(std::string buffer, int fd)
 	}
 
 	// Check if user exists
-	if (kick_fd == -1)
-	{
+	if (kick_fd == -1){
 		std::cerr << "\033[1;91mUser not found.\033[0m" << std::endl;
 		return;
 	}
 
 	// Check if the admin is trying to kick himself
-	if (kick_fd == fd)
-	{
+	if (kick_fd == fd){
 		std::cerr << "\033[1;91mYou cannot kick yourself.\033[0m" << std::endl;
 		return;
 	}
