@@ -36,9 +36,6 @@ class Channel
 		std::string getChannelKey() {return (this->key);}
 
 		void setChannelLimit(int limit) {this->limit = limit;}
-		void setChannelKey(std::string key) {this->key = key;}
-
-		void addUser(Server &server,Client c);
 };
 
 #endif

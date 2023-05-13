@@ -19,12 +19,18 @@ void Server::kick(std::string buffer, int fd)
 	}
 	// gelen arg kanllarda var mı kontrolü.
 	this->channel_ok = 0;
-	i = 0;
-	while(i < channels_.size())
+
+	// Get index of the client to remove (we found index for inside the channels.)
+	//düzeltilecek
+	unsigned int index = 0;
+	while (this->channels_.size() > index)
 	{
-		if (channels_[i].getchannelName() == my_vec[1])
+		if (this->channels_[index].getchannelAdminFd() == fd && this->channels_[index].getchannelName() == my_vec[1])
+		{
 			this->channel_ok = 1;
-		i++;
+			break;
+		}
+		index++;
 	}
 
 	if (this->channel_ok == 0)
@@ -34,36 +40,39 @@ void Server::kick(std::string buffer, int fd)
 	}
 
 	my_vec[2] = my_vec[2].substr(1, my_vec[2].size() - 1); //-> parsing #berk to berk.
-	// Get index of the client to remove (we found index for inside the channels.)
-	//düzeltilecek
-	unsigned int index = 0;
-	for (; index < this->clients_.size(); ++index)
-		if (this->clients_[index].getFd() == fd)
+	int kick_fd = 42;
+	for (unsigned int s = 0; s < this->clients_.size(); s++)
+	{
+		if (this->clients_[s].getNickName() == my_vec[2])
+		{
+			kick_fd = this->clients_[s].getFd();
 			break;
+		}
+	}
 
 	//kanal varsa admin diye mi bak.
 	if (this->channel_ok == 1)
 	{
-		if (this->clients_[index].getFd() == fd) //->admin
-		{
 			//searching berk to clients.
-			unsigned int j = 0;
-			while (j < this->clients_.size())
+			std::cout << "***" << std::endl;
+			unsigned int m = 0;
+			while (this->channels_[index]._clientsFd.size() > m)
 			{
-				if (this->clients_[j].getNickName() == my_vec[2])
+				if (this->channels_[index]._clientsFd[m] == kick_fd)
 				{
-					//bulundu berk
-					std::cout << "Berk bulundu" << std::endl;
-					// this->channels_[j]._clientsFd.erase(this->channels_[j]._clientsFd.begin() + 1);  // Kanaldan kullanıcıyı sil
-					// this->channels_[j].setClientCount(this->channels_[j].getchannelUserCount() - 1);
+					std::cout << "Ne:" << this->channels_[index]._clientsFd[m] << std::endl;
+					if (m == 0)
+					{
+						std::cerr << "Admin kendini atamaz" << std::endl;
+						return;
+					}
+					this->channels_[index]._clientsFd.erase(this->channels_[index]._clientsFd.begin() + m);
+					this->channels_[index].setClientCount(this->channels_[index].getchannelUserCount() - 1);
 				}
-				j++;
+				m++;
 			}
-		}
 	}
-	std::string msg = ":" + this->clients_[index].getPrefixName() + " KICK ";
+	std::string msg = ":" + this->client_ret(fd)->getNickName() + " KICK " + my_vec[1] + " " + my_vec[2] + " :Speaking English \r\n";
 	send(fd, msg.c_str(), msg.size(), 0);
-	this->clients_.erase(this->clients_.begin() + index);
 	buffer.clear();
-	close (fd);
 }

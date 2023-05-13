@@ -25,7 +25,7 @@ void Server::quit(std::string str, int fd)
 
 		// Get index of the client to remove
 		unsigned int index = 0;
-		for (; index < this->clients_.size(); ++index)
+		for (; index < this->clients_.size(); index++)
 			if (this->clients_[index].getFd() == fd)
 				break;
 

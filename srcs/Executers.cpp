@@ -63,5 +63,5 @@ void	Server::executable(std::string command, std::string args, int fd)
 	if (command == "KICK")
 		kick(args, fd);
 	if (command == "MODE")
-		kick(args, fd);
+		mode(args, fd);
 }
