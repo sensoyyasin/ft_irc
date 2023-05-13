@@ -13,8 +13,8 @@ void Server::privmsg(std::string buffer, int fd)
 		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
 			command += buffer[i++]; //first ->command
 		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
-			i++;
-		my_vec.push_back(command);
+				i++;
+			my_vec.push_back(command);
 	}
 
 	std::cout << my_vec[0] << std::endl;
@@ -32,7 +32,10 @@ void Server::privmsg(std::string buffer, int fd)
 				if (channels_[j]._clientsFd[k] != fd)
 				{
 					int fdTemp = channels_[j]._clientsFd[k];
-					std::string b = ":" + this->client_ret(fd)->getPrefixName() + " PRIVMSG " + my_vec[0] + " " + my_vec[1] + "\r\n";
+					std::string b = ":" + this->client_ret(fd)->getPrefixName() + " PRIVMSG " + my_vec[0] + " ";
+					for (unsigned int m = 1; m < my_vec.size(); m++)
+						b += my_vec[m] + " ";
+					b += "\r\n";
 					send(fdTemp, b.c_str(), b.size(), 0);
 					b.clear();
 				}
