@@ -4,7 +4,9 @@
 
 void Server::bot(std::string buffer, int fd)
 {
-	// /bot 1 2 3
+	// /bot 1
+	// /bot 2
+	// /bot 3
 	std::vector<std::string> my_vec;
 	unsigned int i = 0;
 
