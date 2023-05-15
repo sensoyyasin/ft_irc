@@ -4,9 +4,6 @@
 
 void Server::bot(std::string buffer, int fd)
 {
-	// /bot 1
-	// /bot 2
-	// /bot 3
 	std::vector<std::string> my_vec;
 	unsigned int i = 0;
 
@@ -19,38 +16,25 @@ void Server::bot(std::string buffer, int fd)
 			i++;
 		my_vec.push_back(command);
 	}
+
 	if (my_vec.size() != 1){
 		std::cerr << "\033[1;91mError.\033[0m" << std::endl;
 		return;
 	}
-	// /bot 1
-	if (my_vec[0] == "1")
+
+	if (my_vec[0] == "1" || my_vec[0] == "2" || my_vec[0] == "3")
 	{
-		std::string command = "open https://www.youtube.com/watch?v=ETxmCCsMoD0";
+		std::string command = "";
+		if (my_vec[0] == "1")
+			command = "open https://www.youtube.com/watch?v=ETxmCCsMoD0";
+		else if (my_vec[0] == "2")
+			command = "open https://www.youtube.com/watch?v=lyWqQ4KzlzQ";
+		else
+			command = "open https://www.youtube.com/watch?v=h_D3VFfhvs4";
 		system(command.c_str());
-	}
-	// /bot 2
-	else if (my_vec[0] == "2")
-	{
-		std::string command = "open https://www.youtube.com/watch?v=lyWqQ4KzlzQ";
-		system(command.c_str());
-	}
-	// /bot 3
-	else if (my_vec[0] == "3")
-	{
-		std::string command = "open https://www.youtube.com/watch?v=h_D3VFfhvs4";
-		system(command.c_str());
-	}
-	else if (my_vec[0] == "42")
-	{
-		std::string command = "open https://www.youtube.com/watch?v=v2AC41dglnM";
-		system(command.c_str());
+		std::string msg = "Currently Playing: " + my_vec[0] + ". video\r\n";
+		send(fd, msg.c_str(), msg.size(), 0);
 	}
 	else
-	{
-		std::cerr << "\033[1;91mError: Couldn't find this video...\033[0m" << std::endl;
-		return;
-	}
-	std::string msg = "Currently Playing: " + my_vec[0] + ". video\r\n";
-	send(fd, msg.c_str(), msg.size(), 0);
+		std::cerr << "\033[1;91mError: couldn't find this video...\033[0m" << std::endl;
 }

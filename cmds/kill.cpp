@@ -25,7 +25,8 @@ void Server::kill(std::string buffer, int fd)
 
 	bool flag = false;
 	for (unsigned int i = 0; i < this->clients_.size(); i++) {
-		if (this->clients_[i].getNickName() == my_vec[0]) {
+		if (this->clients_[i].getNickName() == my_vec[0])
+		{
 			flag = true;
 			int target_fd = this->clients_[i].getFd();
 			std::string msg = ":" + this->client_ret(fd)->getNickName() + " KILL " + my_vec[0] + " :Killed by " + this->client_ret(fd)->getNickName() + " " + my_vec[1] + "\r\n";
@@ -36,8 +37,9 @@ void Server::kill(std::string buffer, int fd)
 		}
 	}
 
-	if (flag == false){
-		std::cerr << "\033[1;91mKullanici bulunamadi.\033[0m" << std::endl;
+	if (flag == false)
+	{
+		std::cerr << "\033[1;91mThe user couldn't find\033[0m" << std::endl;
 		return;
 	}
 	buffer.clear();

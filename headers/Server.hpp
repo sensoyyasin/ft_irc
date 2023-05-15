@@ -67,13 +67,13 @@ class Server
 		void quit(std::string, int);
 		void ping(std::string, int);
 		void privmsg(std::string, int);
-		void pass(std::string, int);
+		void pass(std::string);
 		void kick(std::string, int);
 		void mode(std::string, int);
 		void kill(std::string, int);
 		void bot(std::string, int);
 
-		void nick_change(std::string, std::string, int);
+		void nick_change(std::string, int);
 		void nick_first(std::string, std::string, int);
 
 		int client_nick_check(std::string nickname);
