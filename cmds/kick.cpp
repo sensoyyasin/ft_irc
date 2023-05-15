@@ -4,6 +4,7 @@
 
 void Server::kick(std::string buffer, int fd)
 {
+	// /kick #channel_name user_name
 	std::vector<std::string> my_vec;
 	unsigned int i = 0;
 
@@ -83,6 +84,7 @@ void Server::kick(std::string buffer, int fd)
 	}
 	std::string msg = ":" + this->client_ret(fd)->getNickName() + " KICK " + my_vec[1] + " " + my_vec[2] + " :Speaking English\r\n";
 	send(fd, msg.c_str(), msg.size(), 0);
-	std::cout << "\033[1;92mKicked succesfully..\033[0m" << this->client_ret(fd)->getNickName() << " Kicked " << my_vec[2] << " from the channel\033[0m" << std::endl;
+	std::cout << "\033[1;92mKicked succesfully...\033[0m" << std::endl;
+	std::cout << this->client_ret(fd)->getNickName() << " Kicked " << my_vec[2] << " from the channel." << std::endl;
 	buffer.clear();
 }

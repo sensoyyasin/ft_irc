@@ -6,20 +6,41 @@ void Server::quit(std::string str, int fd)
 {
 	if (this->flag == 0)
 	{
-		std::cout << "\033[1;91mError: " << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m" << std::endl;
+		//There is no join
+		std::cerr << "\033[1;91mError: " << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m" << std::endl;
 		exit(1);
 	}
 
-	else if (this->client_ret(fd))
+	std::vector<std::string> my_vec;
+	unsigned int i = 0;
+
+	while (buffer.size() > i)
 	{
-
-		std::cout << "\033[1;91m" << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m" << std::endl;
-
-		// Quit message
-		unsigned int i = 0;
 		std::string command = "";
-		while (i < str.size() && (str[i] != '\r' && str[i] != '\n'))
-			command += str[i++];
+		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
+			command += buffer[i++];
+		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
+			i++;
+		my_vec.push_back(command);
+	}
+
+	i = 0;
+	bool flag = false;
+	my_vec[1] = my_vec[1].substr(1); //cut the :
+
+	while (this->channels_.size() > i)
+	{
+		if (this->channels_[i].getchannelName() == my_vec[1])
+		{
+			flag = true;
+			break;
+		}
+		i++;
+	}
+
+	if (this->client_ret(fd) && flag == true)
+	{
+		std::cout << "\033[1;91m" << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m" << std::endl;
 
 		// Get index of the client to remove
 		unsigned int index = 0;
@@ -39,10 +60,10 @@ void Server::quit(std::string str, int fd)
 					if (this->channels_[x].getchannelUserCount() == 1) // kanalı sil
 					{
 						this->channels_[x].setchannelAdminFd(-1);
-						this->channels_[x]._clientsFd.pop_back();
-
 						this->channels_[x]._clientsFd.erase(this->channels_[x]._clientsFd.begin() + k); // Kanaldan kullanıcıyı sil
+						this->channels_[x]._clientsFd.pop_back();
 						this->channels_.erase(this->channels_.begin() + x);
+						std::cout << "Burada mi3" << std::endl;
 						break;
 					}
 					else // change to client admin
@@ -67,5 +88,10 @@ void Server::quit(std::string str, int fd)
 		// Remove the client from the vector and close the connection
 		this->clients_.erase(this->clients_.begin() + index);
 		//close(fd);
+	}
+	else
+	{
+		std::cerr << "\033[1;91mError...\033[0m" << std::endl;
+		return;
 	}
 }
