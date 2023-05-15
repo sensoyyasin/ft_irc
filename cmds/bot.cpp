@@ -41,6 +41,16 @@ void Server::bot(std::string buffer, int fd)
 		std::string command = "open https://www.youtube.com/watch?v=h_D3VFfhvs4";
 		system(command.c_str());
 	}
+	else if (my_vec[0] == "42")
+	{
+		std::string command = "open https://www.youtube.com/watch?v=v2AC41dglnM";
+		system(command.c_str());
+	}
+	else
+	{
+		std::cerr << "\033[1;91mError: Couldn't find this video...\033[0m" << std::endl;
+		return;
+	}
 	std::string msg = "Currently Playing: " + my_vec[0] + ". video\r\n";
 	send(fd, msg.c_str(), msg.size(), 0);
 }
