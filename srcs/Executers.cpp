@@ -4,27 +4,33 @@
 
 void	Server::executeCommand(int fd)
 {
-	while (this->buffer.find("\r\n"))
+
+	std::string	message;
+	char buff[100] = {0};
+
+	while (!std::strstr(buff, "\r\n"))
 	{
-		buffer.clear();
-		char buff[BUFFER_SIZE];
-		memset(buff, 0, BUFFER_SIZE); /* Cleaning up memory */
-		int bytes_received = recv(fd, buff, BUFFER_SIZE, 0);
-		if(buff[0] > 31)
-			std::cout << "Received message: *" << buff << "* from fd: *" << fd << "*" << std::endl;
-		if (bytes_received < 0)
-		{
-			std::cerr << "Receive ended" << std::endl;
-			return ;
-		}
-		buffer = std::string(buff);
+		memset(buff, 0, 100);
+		if(-1 == recv(fd, buff, 100, 0))
+			std::cout<< "Error: Failed recv function!\n";
+		message.append(buff);
+	}
+
+	std::stringstream newMessage(message);
+	std::string buffer;
+
+	while (std::getline(newMessage, buffer))
+	{
+
+		buffer = buffer.substr(0, buffer.length() - (buffer[buffer.length() - 1] == '\r'));
+		
 		unsigned int i = 0;
 		while (i < buffer.size())
 		{
 			std::string command = "";
 			std::string args = "";
 			while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-				command += buffer[i++]; //first ->command
+				command += buffer[i++];
 			while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
 				i++;
 			while (i < buffer.size())
@@ -37,10 +43,12 @@ void	Server::executeCommand(int fd)
 
 void	Server::executable(std::string command, std::string args, int fd)
 {
-	std::cout << "commmand: *" << command << "*" << std::endl;
-	std::cout << "args: *" << args << "*" << std::endl;
-
-	std::transform(command.begin(), command.end(), command.begin(), ::toupper);
+	unsigned int i = 0;
+	while(i < command.size())
+	{
+		command[i] = std::toupper(command[i]);
+		i++;
+	}
 	if (command == "NICK")
 	{
 		if (this->is_nick_first == 1)
@@ -59,7 +67,7 @@ void	Server::executable(std::string command, std::string args, int fd)
 	if (command == "PING")
 		ping(args, fd);
 	if (command == "PASS")
-		pass(args);
+		pass(args, fd);
 	if (command == "KICK")
 		kick(args, fd);
 	if (command == "MODE")
@@ -68,4 +76,6 @@ void	Server::executable(std::string command, std::string args, int fd)
 		kill(args, fd);
 	if (command == "BOT")
 		bot(args, fd);
+	if (command == "USER")
+		user(args, fd);
 }
