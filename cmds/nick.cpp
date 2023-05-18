@@ -7,7 +7,7 @@ void Server::nick_change(std::string buffer, int fd)
 	std::string command = "";
 	unsigned int i = 0;
 	while (i < buffer.size() && (buffer[i] > 32))
-		command += buffer[i++]; //first ->command
+		command += buffer[i++];
 	if (this->client_ret(fd) && !this->client_nick_check(command))
 	{
 		std::string b = ":" + this->client_ret(fd)->getPrefixName()+" NICK "+command+"\r\n";

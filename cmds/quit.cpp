@@ -7,7 +7,6 @@ void Server::quit(std::string str, int fd)
 	this->pass_fd[fd].erase();
 	if (this->flag == 0)
 	{
-		//There is no join
 		if(this->client_ret(fd))
 		{
 			std::cerr << "\033[1;91mError: " << this->client_ret(fd)->getNickName() << " is leaving with message\033[0m" << std::endl;
@@ -89,9 +88,7 @@ void Server::quit(std::string str, int fd)
 		for (size_t i = 0; i < pollfds.size(); i++)
 		{
 			if(fd == clients_[i].getFd())
-			{
 				clients_.erase(clients_.begin()+i);
-			}
 		}
 
 		// Set the admin to the previous client if the current admin quits

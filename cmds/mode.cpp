@@ -11,7 +11,7 @@ void Server::mode(std::string buffer, int fd)
 	{
 		std::string command = "";
 		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-			command += buffer[i++]; //first ->command
+			command += buffer[i++];
 		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
 			i++;
 		my_vec.push_back(command);

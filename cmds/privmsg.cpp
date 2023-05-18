@@ -10,7 +10,7 @@ void Server::privmsg(std::string buffer, int fd)
 	{
 		std::string command = "";
 		while (i < buffer.size() && (buffer[i] != ' ' && buffer[i] != '\r' && buffer[i] != '\n'))
-			command += buffer[i++]; //first ->command
+			command += buffer[i++];
 		while (i < buffer.size() && (buffer[i] == ' ' || buffer[i] == '\r' || buffer[i] == '\n'))
 				i++;
 			my_vec.push_back(command);
@@ -18,7 +18,6 @@ void Server::privmsg(std::string buffer, int fd)
 
 	if (my_vec[0][0] == '#')
 	{
-		// Kanaldaki herkese broadcast, kendinin fd'si hariç
 		unsigned int j = 0;
 		while (j < channels_.size())
 		{
@@ -27,7 +26,7 @@ void Server::privmsg(std::string buffer, int fd)
 				std::vector<int>::iterator it = std::find(channels_[j]._clientsFd.begin(), channels_[j]._clientsFd.end(), fd);
 				if(channels_[j].n == true && it == channels_[j]._clientsFd.end())
 				{
-					std::cout<<"NO MESSAGES ALLOWED FROM THE OUTSIDE TO "<<this->channels_[j].getchannelName()<<"!\n";
+					std::cout << "NO MESSAGES ALLOWED FROM THE OUTSIDE TO " << this->channels_[j].getchannelName() << "!\n";
 					std::string b = ":" + this->client_ret(fd)->getPrefixName()+" NOTICE "+ this->client_ret(fd)->getNickName() +" NO MESSAGES ALLOWED FROM THE OUTSIDE TO "+this->channels_[j].getchannelName()+"!\r\n";
 					send(fd, b.c_str(), b.size(), 0);
 					return;

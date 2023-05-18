@@ -68,14 +68,14 @@ void Server::join(std::string buffer, int fd)
 			{
 				if(channels_[idx].l == true && channels_[idx].getChannelLimit() <= channels_[idx].getchannelUserCount()) //l user limit
 				{
-					std::cout<<"CHANNEL IS FULL, TRY ANOTHER TIME OR CONTACT WITH ADMIN!\n";
+					std::cout << "CHANNEL IS FULL, TRY ANOTHER TIME OR CONTACT WITH ADMIN!\n";
 					std::string b = ":" + this->client_ret(fd)->getPrefixName()+" NOTICE "+ this->client_ret(fd)->getNickName() +" CHANNEL IS FULL, TRY ANOTHER TIME OR CONTACT WITH ADMIN!\r\n";
 					send(fd, b.c_str(), b.size(), 0);
 					return;
 				}
 				else if(channels_[idx].k == true && (my_vec.size() < 2 || channels_[idx].getChannelKey() != my_vec[1]))
 				{
-					std::cout<<"WRONG KEY, THIS CHANNEL IS PASSWORD PROTECTED!\n";
+					std::cout << "WRONG KEY, THIS CHANNEL'S PASSWORD PROTECTED!\n";
 					std::string b = ":" + this->client_ret(fd)->getPrefixName()+" NOTICE "+ this->client_ret(fd)->getNickName() +" WRONG KEY, THIS CHANNEL IS PASSWORD PROTECTED!\r\n";
 					send(fd, b.c_str(), b.size(), 0);
 					return;
